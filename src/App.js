@@ -84,15 +84,19 @@ const services = [
 ];
 
 const gallery = [
-  { emoji:"💎", label:"Diamond Chrome",    sub:"Mirror finish acrylic",   accent:C.silver },
-  { emoji:"🖤", label:"Midnight Matte",    sub:"Short almond acrylic",    accent:C.dim    },
-  { emoji:"✨", label:"Holographic Tips",  sub:"Medium coffin set",       accent:C.lav    },
-  { emoji:"🌸", label:"Blush & Gems",      sub:"SNS with nail art",       accent:C.rose   },
-  { emoji:"💅", label:"Glazed Chrome",     sub:"Short square acrylic",    accent:C.chrome },
-  { emoji:"🔮", label:"Smoky Purple",      sub:"Medium stiletto",         accent:C.lav    },
-  { emoji:"⭐", label:"Gold Foil",         sub:"Custom nail art",         accent:C.gold   },
-  { emoji:"🤍", label:"Clean French",      sub:"Short oval acrylic",      accent:C.silver },
-  { emoji:"🌙", label:"Galaxy Ombré",      sub:"Medium coffin",           accent:C.sky    },
+  { img:"/nail1.jpg",  label:"Bold Expression",   sub:"Custom art acrylic set",              accent:C.pink   },
+  { img:"/nail2.jpg",  label:"Blueberry French",   sub:"Hand-painted floral tips with gems",  accent:C.lav    },
+  { img:"/nail3.jpg",  label:"Tropical Vibes",     sub:"Teal French tips with hibiscus art",  accent:C.mint   },
+  { img:"/nail4.jpg",  label:"Wild Combo",         sub:"Tiger print mani & pedi set",         accent:C.rose   },
+  { img:"/nail5.jpg",  label:"Jungle Luxe",        sub:"Ombré tips with 3D flower & gems",    accent:C.gold   },
+  { img:"/nail6.jpg",  label:"Summer Daisy",       sub:"Yellow French with floral nail art",  accent:C.pink   },
+  { img:"/nail7.jpg",  label:"Haze Signature",     sub:"Iridescent chrome short set",         accent:C.silver },
+  { img:"/nail8.jpg",  label:"Teal & Leopard",     sub:"3D flower with leopard print tips",   accent:C.mint   },
+  { img:"/nail9.jpg",  label:"Neon Swirl",         sub:"Full color custom painted art",       accent:C.lav    },
+  { img:"/nail10.jpg", label:"Candy Stripes",      sub:"Bold pink & yellow stripe mix",       accent:C.pink   },
+  { img:"/nail11.jpg", label:"Mermaid Gold",       sub:"Teal & rose gold chrome with gems",   accent:C.gold   },
+  { img:"/nail12.jpg", label:"Nude & Gold",        sub:"Nude base with gold swirl art",       accent:C.rose   },
+  { img:"/nail13.jpg", label:"Pink Bling Queen",   sub:"Extra long pink with 3D charms",      accent:C.pink   },
 ];
 
 const times = ["9:00 AM","9:30 AM","10:00 AM","10:30 AM","11:00 AM","12:00 PM","1:00 PM","2:00 PM","2:30 PM","3:00 PM","4:00 PM","4:30 PM","5:00 PM"];
@@ -369,11 +373,13 @@ export default function HazeEffect() {
                 </div>
                 <div className="three-col" style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:10 }}>
                   {gallery.slice(0,6).map((g,i)=>(
-                    <div key={i} className="gal fu" style={{ "--acc":g.accent, animationDelay:`${i*.06}s`, background:"rgba(240,238,232,.9)" }}>
-                      <div style={{ position:"absolute", inset:0, background:`radial-gradient(circle at 40% 35%,${g.accent}25,transparent 65%)` }} />
-                      <div style={{ fontSize:44, marginBottom:8, position:"relative" }}>{g.emoji}</div>
-                      <div className="cg" style={{ fontSize:14, fontWeight:400, color:g.accent, position:"relative" }}>{g.label}</div>
-                      <div className="dm" style={{ fontSize:10, color:C.muted, marginTop:2, position:"relative", fontWeight:500 }}>{g.sub}</div>
+                    <div key={i} className="gal fu" style={{ "--acc":g.accent, animationDelay:`${i*.06}s`, background:"#1A1A1A", overflow:"hidden" }}>
+                      <img src={g.img} alt={g.label} style={{ position:"absolute", inset:0, width:"100%", height:"100%", objectFit:"cover", opacity:.85 }} />
+                      <div style={{ position:"absolute", inset:0, background:"linear-gradient(to top, rgba(0,0,0,.75) 0%, transparent 50%)" }} />
+                      <div style={{ position:"absolute", bottom:12, left:12, right:12, zIndex:1 }}>
+                        <div className="cg" style={{ fontSize:14, fontWeight:400, color:"#fff" }}>{g.label}</div>
+                        <div className="dm" style={{ fontSize:10, color:"rgba(255,255,255,.7)", marginTop:2 }}>{g.sub}</div>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -505,11 +511,13 @@ export default function HazeEffect() {
             </div>
             <div className="three-col" style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:10 }}>
               {gallery.map((g,i)=>(
-                <div key={i} className="gal fu" style={{ "--acc":g.accent, animationDelay:`${i*.06}s` }}>
-                  <div style={{ position:"absolute", inset:0, background:`radial-gradient(circle at 40% 35%,${g.accent}18,transparent 65%)` }} />
-                  <div style={{ fontSize:48, marginBottom:10, position:"relative" }}>{g.emoji}</div>
-                  <div className="cg" style={{ fontSize:15, fontWeight:300, color:g.accent, position:"relative" }}>{g.label}</div>
-                  <div className="dm" style={{ fontSize:10, color:C.dim, marginTop:3, position:"relative" }}>{g.sub}</div>
+                <div key={i} className="gal fu" style={{ "--acc":g.accent, animationDelay:`${i*.06}s`, background:"#1A1A1A", overflow:"hidden" }}>
+                  <img src={g.img} alt={g.label} style={{ position:"absolute", inset:0, width:"100%", height:"100%", objectFit:"cover", opacity:.85 }} />
+                  <div style={{ position:"absolute", inset:0, background:"linear-gradient(to top, rgba(0,0,0,.8) 0%, transparent 55%)" }} />
+                  <div style={{ position:"absolute", bottom:14, left:14, right:14, zIndex:1 }}>
+                    <div className="cg" style={{ fontSize:15, fontWeight:400, color:"#fff" }}>{g.label}</div>
+                    <div className="dm" style={{ fontSize:11, color:"rgba(255,255,255,.65)", marginTop:3 }}>{g.sub}</div>
+                  </div>
                 </div>
               ))}
             </div>
@@ -595,7 +603,6 @@ export default function HazeEffect() {
                   { icon:"📍", label:"Location",    val:"Columbus, OH — Mobile Service" },
                   { icon:"📱", label:"Phone",        val:"(614) 687-7124" },
                   { icon:"🌍", label:"Service Area", val:"Columbus & Surrounding Areas" },
-                  { icon:"⏰", label:"Hours",        val:"By Appointment Only" },
                   { icon:"✦",  label:"Booking",      val:"Book online — deposits required" },
                 ].map((c,i)=>(
                   <div key={i} style={{ display:"flex", gap:14, alignItems:"flex-start", padding:"18px", background:"rgba(250,250,248,.85)", border:`1px solid ${C.border}`, borderRadius:4 }}>
@@ -606,6 +613,28 @@ export default function HazeEffect() {
                     </div>
                   </div>
                 ))}
+
+                {/* HOURS OF OPERATION */}
+                <div style={{ background:"rgba(250,250,248,.85)", border:`1px solid ${C.border}`, borderRadius:4, padding:"18px", position:"relative", overflow:"hidden" }}>
+                  <div style={{ position:"absolute", top:0, left:0, right:0, height:2, background:`linear-gradient(90deg,${C.pink},${C.lav},${C.mint})` }} />
+                  <div style={{ display:"flex", gap:14, alignItems:"flex-start" }}>
+                    <div style={{ fontSize:18, flexShrink:0 }}>⏰</div>
+                    <div style={{ width:"100%" }}>
+                      <div className="dm" style={{ fontSize:9, color:C.dim, fontWeight:600, letterSpacing:2, textTransform:"uppercase", marginBottom:10 }}>Hours of Operation</div>
+                      {[
+                        { day:"Mon, Tue, Thu, Fri", hours:"10:00 AM — 10:00 PM" },
+                        { day:"Wednesday",          hours:"10:00 AM — 12:30 PM  &  3:30 PM — 10:00 PM" },
+                        { day:"Saturday & Sunday",  hours:"10:00 AM — 10:00 PM" },
+                      ].map((h,i)=>(
+                        <div key={i} style={{ display:"flex", justifyContent:"space-between", alignItems:"center", paddingBottom:6, marginBottom:6, borderBottom:i<2?`1px solid ${C.border}`:"none", flexWrap:"wrap", gap:4 }}>
+                          <div className="dm" style={{ fontSize:12, fontWeight:600, color:C.chrome }}>{h.day}</div>
+                          <div className="dm" style={{ fontSize:12, color:"#0A0806", fontWeight:500 }}>{h.hours}</div>
+                        </div>
+                      ))}
+                      <div className="dm" style={{ fontSize:10, color:C.dim, fontStyle:"italic", marginTop:6 }}>✦ Wednesday includes a mid-day break 12:30 PM — 3:30 PM</div>
+                    </div>
+                  </div>
+                </div>
                 <button className="btn-main" style={{ marginTop:8 }} onClick={()=>nav("book")}>Book Now ✦</button>
               </div>
               <div style={{ background:"rgba(250,250,248,.9)", border:`1px solid ${C.border}`, borderRadius:4, padding:"32px", position:"relative", overflow:"hidden" }}>
