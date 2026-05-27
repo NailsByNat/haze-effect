@@ -77,26 +77,26 @@ const services = [
   { id:2, name:"Medium Full Set",       price:"From $70",  desc:"Make a statement. Medium-length acrylics crafted to turn heads — bold, elegant & built to last.", tag:"ACRYLIC SPECIALIST", accent:C.lav  },
   { id:3, name:"Acrylic Toe Nails",     price:"From $60",  desc:"Extend your glam from fingertips to toes. Full acrylic toe nail set — shaped, polished & camera-ready.", tag:"ACRYLIC SPECIALIST", accent:C.mint },
   { id:4, name:"Dry Pedicure",          price:"From $40",  desc:"No soak, no wait — just clean, precise results. Shape, buff, cuticle care & your favorite polish. Quick & flawless.", tag:"PEDICURE", accent:C.rose },
-  { id:5, name:"Basic Manicure",        price:"From $40",  desc:"Timeless & polished. A full soak, shape, cuticle care & your color of choice. Clean hands, beautiful finish.", tag:"MANICURE", accent:C.sky  },
+  { id:5, name:"Basic Manicure",        price:"From $40",  desc:"Timeless & polished. Shape, cuticle care & your color of choice. Clean hands, beautiful finish.", tag:"MANICURE", accent:C.sky  },
   { id:6, name:"Nail Art",              price:"Custom",    desc:"Your imagination, her expertise. Custom gems, chrome, hand-painted florals, 3D art & one-of-a-kind designs.", tag:"ARTWORK", accent:C.gold },
-  { id:7, name:"Pedicure",              price:"From $45",  desc:"Treat yourself from the ground up. A full soak, scrub, shape, cuticle care & polish — pure relaxation & beauty.", tag:"PEDICURE", accent:C.lav  },
-  { id:8, name:"Fill-In",               price:"From $45",  desc:"Maintain your masterpiece. Expert acrylic fill for grown-out sets — keeping you polished & put-together between full sets.", tag:"ACRYLIC", accent:C.pink },
 ];
 
 const gallery = [
-  { img:"/nail1.jpg",  label:"Bold Expression",   sub:"Custom art acrylic set",              accent:C.pink   },
-  { img:"/nail2.jpg",  label:"Blueberry French",   sub:"Hand-painted floral tips with gems",  accent:C.lav    },
-  { img:"/nail3.jpg",  label:"Tropical Vibes",     sub:"Teal French tips with hibiscus art",  accent:C.mint   },
-  { img:"/nail4.jpg",  label:"Wild Combo",         sub:"Tiger print mani & pedi set",         accent:C.rose   },
-  { img:"/nail5.jpg",  label:"Jungle Luxe",        sub:"Ombré tips with 3D flower & gems",    accent:C.gold   },
-  { img:"/nail6.jpg",  label:"Summer Daisy",       sub:"Yellow French with floral nail art",  accent:C.pink   },
-  { img:"/nail7.jpg",  label:"Haze Signature",     sub:"Iridescent chrome short set",         accent:C.silver },
-  { img:"/nail8.jpg",  label:"Teal & Leopard",     sub:"3D flower with leopard print tips",   accent:C.mint   },
-  { img:"/nail9.jpg",  label:"Neon Swirl",         sub:"Full color custom painted art",       accent:C.lav    },
-  { img:"/nail10.jpg", label:"Candy Stripes",      sub:"Bold pink & yellow stripe mix",       accent:C.pink   },
-  { img:"/nail11.jpg", label:"Mermaid Gold",       sub:"Teal & rose gold chrome with gems",   accent:C.gold   },
-  { img:"/nail12.jpg", label:"Nude & Gold",        sub:"Nude base with gold swirl art",       accent:C.rose   },
-  { img:"/nail13.jpg", label:"Pink Bling Queen",   sub:"Extra long pink with 3D charms",      accent:C.pink   },
+  { img:"/nail1.jpg",   label:"Bold Expression",      sub:"Custom art acrylic set",                          accent:C.pink   },
+  { img:"/nail2.jpg",   label:"Blueberry French",      sub:"3D blueberries with cute butter yellow French tip", accent:C.lav    },
+  { img:"/nail3.jpg",   label:"Tropical Vibes",        sub:"Teal French tips with hibiscus art",              accent:C.mint   },
+  { img:"/nail4.jpg",   label:"Wild Combo",            sub:"Tiger print mani & matching pedi set",            accent:C.rose   },
+  { img:"/nail5.jpg",   label:"Jungle Luxe",           sub:"Ombré tips with 3D flower & gems",                accent:C.gold   },
+  { img:"/nail6.jpg",   label:"Summer Daisy",          sub:"Yellow French with floral nail art",              accent:C.pink   },
+  { img:"/nail7.jpg",   label:"Haze Signature",        sub:"Iridescent chrome short set",                     accent:C.silver },
+  { img:"/nail8.jpg",   label:"Teal & Leopard",        sub:"3D flower with leopard print tips",               accent:C.mint   },
+  { img:"/nail9.jpg",   label:"Neon Swirl",            sub:"Full color custom painted art",                   accent:C.lav    },
+  { img:"/nail10.jpg",  label:"Candy Stripes",         sub:"Bold pink & yellow stripe mix",                   accent:C.pink   },
+  { img:"/nail11.jpg",  label:"Mermaid Gold",          sub:"Teal & rose gold chrome with gems",               accent:C.gold   },
+  { img:"/nail12.jpg",  label:"Nude & Gold",           sub:"Nude base with gold swirl art",                   accent:C.rose   },
+  { img:"/nail13.jpg",  label:"Pink Bling Queen",      sub:"Extra long pink with 3D charms",                  accent:C.pink   },
+  { img:"/nails15.jpg", label:"Red Velvet Combo",      sub:"Red French tips with leopard heart gem & matching pedi", accent:C.rose },
+  { img:"/nails16.jpg", label:"Wild & Refined",        sub:"Nude stiletto with leopard print & silver gems",  accent:C.silver },
 ];
 
 const times = ["9:00 AM","9:30 AM","10:00 AM","10:30 AM","11:00 AM","12:00 PM","1:00 PM","2:00 PM","2:30 PM","3:00 PM","4:00 PM","4:30 PM","5:00 PM"];
@@ -315,7 +315,7 @@ export default function HazeEffect() {
             <div className="stats-row" style={{ display:"grid", gridTemplateColumns:"repeat(2,1fr)", borderBottom:`1px solid ${C.border}` }}>
               {[
                 { num:"100%", label:"Mobile Service",   color:C.lav  },
-                { num:"9",    label:"Services Offered", color:C.pink },
+                { num:"6",    label:"Services Offered", color:C.pink },
               ].map((s,i)=>(
                 <div key={i} style={{ padding:"32px 20px", textAlign:"center", borderRight:i<1?`1px solid ${C.border}`:"none" }}>
                   <div className="cg" style={{ fontSize:52, fontWeight:300, ...glitterText, lineHeight:1 }}>{s.num}</div>
@@ -492,7 +492,7 @@ export default function HazeEffect() {
             <div style={{ background:`rgba(168,216,208,.15)`, border:`1px solid ${C.mint}44`, padding:"20px 28px", borderRadius:4, display:"flex", alignItems:"center", gap:14 }}>
               <span style={{ fontSize:22, flexShrink:0 }}>🧽</span>
               <p className="dm" style={{ fontSize:13, color:"#0A0806", lineHeight:1.8, fontWeight:400, fontStyle:"italic" }}>
-                <strong style={{ color:C.mint, fontStyle:"normal" }}>Pedicure Perk ✦</strong> Every pedicure service comes with a complimentary foot softener sponge for in-shower use — because the luxury doesn't stop when you leave.
+                <strong style={{ color:C.mint, fontStyle:"normal" }}>Dry Pedicure Perk ✦</strong> Every dry pedicure service comes with a complimentary foot softener sponge for in-shower use — because the luxury doesn't stop when you leave.
               </p>
             </div>
           </div>
