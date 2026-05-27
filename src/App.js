@@ -96,7 +96,7 @@ const gallery = [
   { img:"/nail12.jpg",  label:"Nude & Gold",           sub:"Nude base with gold swirl art",                   accent:C.rose   },
   { img:"/nail13.jpg",  label:"Pink Bling Queen",      sub:"Extra long pink with 3D charms",                  accent:C.pink   },
   { img:"/nails15.jpg", label:"Red Velvet Combo",      sub:"Red French tips with leopard heart gem & matching pedi", accent:C.rose },
-  { img:"/nails16.jpg", label:"Wild & Refined",        sub:"Nude stiletto with leopard print & silver gems",  accent:C.silver },
+  { img:"/nail16.jpg",  label:"Wild & Refined",        sub:"Nude stiletto with leopard print & silver gems",  accent:C.silver },
 ];
 
 const times = ["9:00 AM","9:30 AM","10:00 AM","10:30 AM","11:00 AM","12:00 PM","1:00 PM","2:00 PM","2:30 PM","3:00 PM","4:00 PM","4:30 PM","5:00 PM"];
@@ -305,7 +305,7 @@ export default function HazeEffect() {
             {/* TICKER */}
             <div style={{ overflow:"hidden", borderTop:`1px solid ${C.border}`, borderBottom:`1px solid ${C.border}`, background:C.surface, padding:"11px 0" }}>
               <div className="ticker">
-                {Array(2).fill(["ACRYLIC SPECIALIST ✦","MOBILE NAIL TECH ✦","CUSTOM NAIL ART ✦","PEDICURE ✦","FULL SETS ✦","FILL-INS ✦","COLUMBUS OH ✦","BOOK NOW ✦"]).flat().map((t,i)=>(
+                {Array(2).fill(["ACRYLIC SPECIALIST ✦","MOBILE NAIL TECH ✦","CUSTOM NAIL ART ✦","DRY PEDICURE ✦","FULL SETS ✦","ACRYLIC TOE NAILS ✦","COLUMBUS OH ✦","BOOK NOW ✦"]).flat().map((t,i)=>(
                   <span key={i} className="dm" style={{ fontSize:10, fontWeight:600, letterSpacing:4, marginRight:48, color:"#0A0806", textTransform:"uppercase" }}>{t}</span>
                 ))}
               </div>
