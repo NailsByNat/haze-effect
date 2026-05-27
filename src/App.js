@@ -73,13 +73,14 @@ function StarField() {
 
 // ── DATA ─────────────────────────────────────────────────
 const services = [
-  { id:1, name:"Short Full Set",       price:"From $60",  desc:"Acrylic full set — short length, any shape. Includes color & finish of your choice.", tag:"ACRYLIC SPECIALIST", accent:C.pink },
-  { id:2, name:"Medium Full Set",      price:"From $70",  desc:"Acrylic full set — medium length, any shape. Bold, dramatic, statement-making.", tag:"ACRYLIC SPECIALIST", accent:C.lav  },
-  { id:3, name:"Dry Pedicure",         price:"From $40",  desc:"Shape, buff, cuticle care & polish. No soak — quick, clean & precise.", tag:"PEDICURE", accent:C.mint },
-  { id:4, name:"Basic Manicure",       price:"From $40",  desc:"Full soak, shape, cuticle care & your color of choice. Classic & clean.", tag:"MANICURE", accent:C.rose },
-  { id:5, name:"Nail Art",             price:"Custom",    desc:"Custom designs, gems, chrome, hand-painted art & more. Your vision, her expertise.", tag:"ARTWORK", accent:C.gold },
-  { id:6, name:"Pedicure",             price:"From $45",  desc:"Soak, scrub, shape, cuticle care & polish. Treat your feet right.", tag:"PEDICURE", accent:C.lav  },
-  { id:7, name:"Fill-In",              price:"From $45",  desc:"Acrylic fill for grown-out sets. Maintain your look between full sets.", tag:"ACRYLIC", accent:C.pink },
+  { id:1, name:"Short Full Set",        price:"From $60",  desc:"A flawless acrylic full set in short length — shaped, polished & perfected to your vision. Every detail, done right.", tag:"ACRYLIC SPECIALIST", accent:C.pink },
+  { id:2, name:"Medium Full Set",       price:"From $70",  desc:"Make a statement. Medium-length acrylics crafted to turn heads — bold, elegant & built to last.", tag:"ACRYLIC SPECIALIST", accent:C.lav  },
+  { id:3, name:"Acrylic Toe Nails",     price:"From $60",  desc:"Extend your glam from fingertips to toes. Full acrylic toe nail set — shaped, polished & camera-ready.", tag:"ACRYLIC SPECIALIST", accent:C.mint },
+  { id:4, name:"Dry Pedicure",          price:"From $40",  desc:"No soak, no wait — just clean, precise results. Shape, buff, cuticle care & your favorite polish. Quick & flawless.", tag:"PEDICURE", accent:C.rose },
+  { id:5, name:"Basic Manicure",        price:"From $40",  desc:"Timeless & polished. A full soak, shape, cuticle care & your color of choice. Clean hands, beautiful finish.", tag:"MANICURE", accent:C.sky  },
+  { id:6, name:"Nail Art",              price:"Custom",    desc:"Your imagination, her expertise. Custom gems, chrome, hand-painted florals, 3D art & one-of-a-kind designs.", tag:"ARTWORK", accent:C.gold },
+  { id:7, name:"Pedicure",              price:"From $45",  desc:"Treat yourself from the ground up. A full soak, scrub, shape, cuticle care & polish — pure relaxation & beauty.", tag:"PEDICURE", accent:C.lav  },
+  { id:8, name:"Fill-In",               price:"From $45",  desc:"Maintain your masterpiece. Expert acrylic fill for grown-out sets — keeping you polished & put-together between full sets.", tag:"ACRYLIC", accent:C.pink },
 ];
 
 const gallery = [
@@ -110,6 +111,7 @@ export default function HazeEffect() {
   const [address, setAddress]   = useState("");
   const [agreed, setAgreed]     = useState(false);
   const [confirmed, setConfirmed] = useState(false);
+  const [openFaq, setOpenFaq]   = useState(null);
 
   const today = new Date();
   const dates = Array.from({length:14},(_,i)=>{ const d=new Date(today); d.setDate(today.getDate()+i+1); return d; });
@@ -275,9 +277,8 @@ export default function HazeEffect() {
 
                 {/* QUOTE */}
                 <div className="fu" style={{ borderLeft:`2px solid ${C.lav}`, paddingLeft:20, marginBottom:40, animationDelay:".18s" }}>
-                  <p className="cg" style={{ fontSize:"clamp(18px,2.5vw,24px)", fontStyle:"italic", color:"#0A0806", lineHeight:1.6, fontWeight:400 }}>
-                    "Bold. Glam. Unapologetically you.<br />
-                    <span style={{ color:"#0A0806", fontStyle:"italic" }}>Haze brings the nail art that stops traffic</span> — wherever you are."
+                  <p className="cg" style={{ fontSize:"clamp(18px,2.5vw,24px)", fontStyle:"italic", color:"#0A0806", lineHeight:1.8, fontWeight:400 }}>
+                    "Bold. Glam. Unapologetically you. Haze brings the nail art that stops traffic — wherever you are. All I need is a chair & an outlet."
                   </p>
                 </div>
 
@@ -310,7 +311,7 @@ export default function HazeEffect() {
             <div className="stats-row" style={{ display:"grid", gridTemplateColumns:"repeat(2,1fr)", borderBottom:`1px solid ${C.border}` }}>
               {[
                 { num:"100%", label:"Mobile Service",   color:C.lav  },
-                { num:"8",    label:"Services Offered", color:C.pink },
+                { num:"9",    label:"Services Offered", color:C.pink },
               ].map((s,i)=>(
                 <div key={i} style={{ padding:"32px 20px", textAlign:"center", borderRight:i<1?`1px solid ${C.border}`:"none" }}>
                   <div className="cg" style={{ fontSize:52, fontWeight:300, ...glitterText, lineHeight:1 }}>{s.num}</div>
@@ -478,9 +479,15 @@ export default function HazeEffect() {
                 </div>
               ))}
             </div>
-            <div style={{ background:"rgba(250,250,248,.9)", border:`1px solid ${C.border}`, padding:"24px 28px", borderRadius:4 }}>
+            <div style={{ background:"rgba(250,250,248,.9)", border:`1px solid ${C.border}`, padding:"24px 28px", borderRadius:4, marginBottom:14 }}>
               <div className="dm" style={{ fontSize:10, letterSpacing:2, color:C.lav, textTransform:"uppercase", fontWeight:600, marginBottom:10 }}>✦ Note on Pricing</div>
               <p className="dm" style={{ fontSize:13, color:"#0A0806", lineHeight:1.8, fontWeight:400 }}>All listed prices are <strong style={{ color:C.chrome }}>starting rates</strong>. Final pricing may vary based on nail length, shape, design complexity, and add-ons. A non-refundable deposit is required to secure your appointment. Exact pricing will be confirmed at booking.</p>
+            </div>
+            <div style={{ background:`rgba(168,216,208,.15)`, border:`1px solid ${C.mint}44`, padding:"20px 28px", borderRadius:4, display:"flex", alignItems:"center", gap:14 }}>
+              <span style={{ fontSize:22, flexShrink:0 }}>🧽</span>
+              <p className="dm" style={{ fontSize:13, color:"#0A0806", lineHeight:1.8, fontWeight:400, fontStyle:"italic" }}>
+                <strong style={{ color:C.mint, fontStyle:"normal" }}>Pedicure Perk ✦</strong> Every pedicure service comes with a complimentary foot softener sponge for in-shower use — because the luxury doesn't stop when you leave.
+              </p>
             </div>
           </div>
         )}
@@ -585,10 +592,11 @@ export default function HazeEffect() {
             <div className="two-col" style={{ display:"grid", gridTemplateColumns:"1fr 1.4fr", gap:52 }}>
               <div style={{ display:"flex", flexDirection:"column", gap:20 }}>
                 {[
-                  { icon:"📍", label:"Location", val:"Columbus, OH — Mobile Service" },
-                  { icon:"📱", label:"Service Area", val:"Columbus & Surrounding Areas" },
-                  { icon:"⏰", label:"Hours", val:"By Appointment Only" },
-                  { icon:"✦",  label:"Booking", val:"Book online — deposits required" },
+                  { icon:"📍", label:"Location",    val:"Columbus, OH — Mobile Service" },
+                  { icon:"📱", label:"Phone",        val:"(614) 687-7124" },
+                  { icon:"🌍", label:"Service Area", val:"Columbus & Surrounding Areas" },
+                  { icon:"⏰", label:"Hours",        val:"By Appointment Only" },
+                  { icon:"✦",  label:"Booking",      val:"Book online — deposits required" },
                 ].map((c,i)=>(
                   <div key={i} style={{ display:"flex", gap:14, alignItems:"flex-start", padding:"18px", background:"rgba(250,250,248,.85)", border:`1px solid ${C.border}`, borderRadius:4 }}>
                     <div style={{ fontSize:18, flexShrink:0 }}>{c.icon}</div>
