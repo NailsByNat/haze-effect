@@ -696,11 +696,14 @@ export default function HazeEffect() {
                   {selDate && fmtDate(new Date(selDate+"T12:00:00"))} · {selTime}
                 </p>
                 <div style={{ background:"rgba(232,229,220,.85)", border:`1px solid ${C.border}`, borderRadius:4, padding:"16px 20px", margin:"24px 0", textAlign:"left" }}>
-                  <div className="dm" style={{ fontSize:10, color:C.lav, fontWeight:600, letterSpacing:2, textTransform:"uppercase", marginBottom:8 }}>✦ Deposit Reminder</div>
-                  <p className="dm" style={{ fontSize:12, color:"#3A3530", lineHeight:1.7, fontWeight:400 }}>Your $25 deposit is non-refundable and secures your appointment. Natasha will reach out to confirm your booking and collect payment via Square.</p>
+                  <div className="dm" style={{ fontSize:10, color:C.lav, fontWeight:600, letterSpacing:2, textTransform:"uppercase", marginBottom:8 }}>✦ Next Step — Pay Your Deposit</div>
+                  <p className="dm" style={{ fontSize:12, color:"#3A3530", lineHeight:1.7, fontWeight:400 }}>Your $10 deposit is required to confirm your appointment. All deposits are non-refundable — no exceptions. Click below to pay securely via Square!</p>
                 </div>
-                <p className="dm" style={{ fontSize:12, color:C.dim, marginBottom:28 }}>Natasha will text {phone} to confirm! 📱</p>
-                <button className="btn-main" onClick={()=>{ resetBooking(); nav("home"); }}>Back to Home</button>
+                <a href="https://square.link/u/OyBkF4Hy" target="_blank" rel="noopener noreferrer" style={{ textDecoration:"none", display:"block", marginBottom:16 }}>
+                  <button className="btn-main" style={{ width:"100%", fontSize:13, padding:"16px" }}>Pay $10 Deposit Now 💳</button>
+                </a>
+                <p className="dm" style={{ fontSize:11, color:C.dim, marginBottom:24, textAlign:"center" }}>After payment Natasha will text {phone} to confirm! 📱</p>
+                <button className="btn-ghost" style={{ width:"100%" }} onClick={()=>{ resetBooking(); nav("home"); }}>Back to Home</button>
               </div>
 
             ) : step===1 ? (
@@ -788,14 +791,14 @@ export default function HazeEffect() {
 
                 {/* DEPOSIT INFO */}
                 <div style={{ background:"rgba(184,168,232,.08)", border:`1px solid ${C.lav}44`, borderRadius:4, padding:"24px", marginBottom:24 }}>
-                  <div className="dm" style={{ fontSize:10, letterSpacing:2, color:C.lav, textTransform:"uppercase", fontWeight:600, marginBottom:14 }}>✦ Deposit Required — $25</div>
+                  <div className="dm" style={{ fontSize:10, letterSpacing:2, color:C.lav, textTransform:"uppercase", fontWeight:600, marginBottom:14 }}>✦ Deposit Required — $10</div>
                   <div style={{ display:"flex", flexDirection:"column", gap:10, marginBottom:18 }}>
                     {[
-                      "A $25 non-refundable deposit is required to secure your appointment.",
-                      "Deposits are collected via Square — Natasha will send you a payment link after confirmation.",
-                      "Your appointment is NOT confirmed until the deposit is received.",
-                      "Deposits are non-refundable. Cancellations made less than 24 hours before the appointment forfeit the deposit.",
-                      "Rescheduling with 24+ hours notice is allowed and your deposit transfers.",
+                      "A $10 deposit is required to secure your appointment with The Haze Effect.",
+                      "All deposits are non-refundable — no exceptions. This policy is strictly enforced.",
+                      "Your appointment is NOT confirmed until your deposit has been received.",
+                      "If your appointment is cancelled or rescheduled for any reason, a new deposit will be required to rebook.",
+                      "Natasha will reach out via text to confirm your booking after your deposit is received.",
                     ].map((t,i)=>(
                       <div key={i} className="dm" style={{ fontSize:12, color:C.muted, display:"flex", gap:10, alignItems:"flex-start", lineHeight:1.7, fontWeight:300 }}>
                         <span style={{ color:C.lav, flexShrink:0, marginTop:2 }}>✦</span>{t}
@@ -805,7 +808,7 @@ export default function HazeEffect() {
                   <label style={{ display:"flex", alignItems:"flex-start", gap:12, cursor:"pointer" }}>
                     <input type="checkbox" checked={agreed} onChange={e=>setAgreed(e.target.checked)} style={{ marginTop:2, accentColor:C.lav, width:16, height:16, flexShrink:0 }} />
                     <span className="dm" style={{ fontSize:12, color:C.chrome, lineHeight:1.7, fontWeight:400 }}>
-                      I understand and agree to the deposit policy. I acknowledge that my $25 deposit is <strong>non-refundable</strong> and required to confirm my appointment.
+                      I understand and agree to the deposit policy. I acknowledge that my $10 deposit is <strong>non-refundable</strong>, no exceptions, and a new deposit will be required if I cancel or reschedule.
                     </span>
                   </label>
                 </div>
