@@ -75,12 +75,11 @@ function StarField() {
 const services = [
   { id:1, name:"Short Full Set",       price:"From $60",  desc:"Acrylic full set — short length, any shape. Includes color & finish of your choice.", tag:"ACRYLIC SPECIALIST", accent:C.pink },
   { id:2, name:"Medium Full Set",      price:"From $70",  desc:"Acrylic full set — medium length, any shape. Bold, dramatic, statement-making.", tag:"ACRYLIC SPECIALIST", accent:C.lav  },
-  { id:3, name:"Dry Manicure",         price:"From $40",  desc:"Shape, buff, cuticle care & polish. No soak — quick, clean & precise.", tag:"MANICURE", accent:C.mint },
+  { id:3, name:"Dry Pedicure",         price:"From $40",  desc:"Shape, buff, cuticle care & polish. No soak — quick, clean & precise.", tag:"PEDICURE", accent:C.mint },
   { id:4, name:"Basic Manicure",       price:"From $40",  desc:"Full soak, shape, cuticle care & your color of choice. Classic & clean.", tag:"MANICURE", accent:C.rose },
-  { id:5, name:"SNS Manicure",         price:"From $55",  desc:"Signature nail system — durable, lightweight powder dip for long-lasting color.", tag:"SNS", accent:C.sky  },
-  { id:6, name:"Nail Art",             price:"Custom",    desc:"Custom designs, gems, chrome, hand-painted art & more. Your vision, her expertise.", tag:"ARTWORK", accent:C.gold },
-  { id:7, name:"Pedicure",             price:"From $45",  desc:"Soak, scrub, shape, cuticle care & polish. Treat your feet right.", tag:"PEDICURE", accent:C.lav  },
-  { id:8, name:"Fill-In",              price:"From $45",  desc:"Acrylic fill for grown-out sets. Maintain your look between full sets.", tag:"ACRYLIC", accent:C.pink },
+  { id:5, name:"Nail Art",             price:"Custom",    desc:"Custom designs, gems, chrome, hand-painted art & more. Your vision, her expertise.", tag:"ARTWORK", accent:C.gold },
+  { id:6, name:"Pedicure",             price:"From $45",  desc:"Soak, scrub, shape, cuticle care & polish. Treat your feet right.", tag:"PEDICURE", accent:C.lav  },
+  { id:7, name:"Fill-In",              price:"From $45",  desc:"Acrylic fill for grown-out sets. Maintain your look between full sets.", tag:"ACRYLIC", accent:C.pink },
 ];
 
 const gallery = [
@@ -108,14 +107,14 @@ export default function HazeEffect() {
   const [phone, setPhone]       = useState("");
   const [email, setEmail]       = useState("");
   const [notes, setNotes]       = useState("");
+  const [address, setAddress]   = useState("");
   const [agreed, setAgreed]     = useState(false);
   const [confirmed, setConfirmed] = useState(false);
-  const [openFaq, setOpenFaq]   = useState(null);
 
   const today = new Date();
   const dates = Array.from({length:14},(_,i)=>{ const d=new Date(today); d.setDate(today.getDate()+i+1); return d; });
   const fmtDate = d => d.toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"});
-  const resetBooking = () => { setStep(1);setSelSvc(null);setSelDate("");setSelTime("");setName("");setPhone("");setEmail("");setNotes("");setAgreed(false);setConfirmed(false); };
+  const resetBooking = () => { setStep(1);setSelSvc(null);setSelDate("");setSelTime("");setName("");setPhone("");setEmail("");setNotes("");setAddress("");setAgreed(false);setConfirmed(false); };
   const nav = p => { setPage(p); setMenuOpen(false); if(p!=="book") resetBooking(); window.scrollTo(0,0); };
 
   return (
@@ -284,7 +283,7 @@ export default function HazeEffect() {
 
                 <div className="fu" style={{ marginBottom:48, animationDelay:".22s" }}>
                   <p className="dm" style={{ fontSize:15, color:C.muted, lineHeight:1.9, fontWeight:300, maxWidth:480 }}>
-                    Natasha Garnes is Columbus's premier mobile acrylic specialist — bringing luxury nail art directly to you. SNS, manicures, pedicures & custom artwork at your doorstep.
+                    Natasha Garnes is Columbus's premier mobile acrylic specialist — bringing luxury nail art directly to you. Manicures, pedicures, acrylics & custom artwork at your doorstep.
                   </p>
                 </div>
 
@@ -301,7 +300,7 @@ export default function HazeEffect() {
             {/* TICKER */}
             <div style={{ overflow:"hidden", borderTop:`1px solid ${C.border}`, borderBottom:`1px solid ${C.border}`, background:C.surface, padding:"11px 0" }}>
               <div className="ticker">
-                {Array(2).fill(["ACRYLIC SPECIALIST ✦","MOBILE NAIL TECH ✦","SNS MANICURE ✦","CUSTOM NAIL ART ✦","PEDICURE ✦","FULL SETS ✦","FILL-INS ✦","COLUMBUS OH ✦","BOOK NOW ✦"]).flat().map((t,i)=>(
+                {Array(2).fill(["ACRYLIC SPECIALIST ✦","MOBILE NAIL TECH ✦","CUSTOM NAIL ART ✦","PEDICURE ✦","FULL SETS ✦","FILL-INS ✦","COLUMBUS OH ✦","BOOK NOW ✦"]).flat().map((t,i)=>(
                   <span key={i} className="dm" style={{ fontSize:10, fontWeight:600, letterSpacing:4, marginRight:48, color:"#0A0806", textTransform:"uppercase" }}>{t}</span>
                 ))}
               </div>
@@ -394,7 +393,7 @@ export default function HazeEffect() {
                     Natasha Garnes is Columbus, Ohio's go-to mobile acrylic specialist and the creative force behind The Haze Effect. With a passion for precision, she brings luxury nail art directly to your door.
                   </p>
                   <p className="dm" style={{ fontSize:14, color:"#0A0806", lineHeight:1.95, fontWeight:400, marginBottom:32 }}>
-                    Specializing in acrylics, SNS, and custom nail art — every set is crafted with intention. Bold, glam, and unapologetically you.
+                    Specializing in acrylics and custom nail art — every set is crafted with intention. Bold, glam, and unapologetically you.
                   </p>
                   <button className="btn-ghost" onClick={()=>nav("about")}>My Full Story →</button>
                 </div>
@@ -403,7 +402,6 @@ export default function HazeEffect() {
                 <div style={{ display:"flex", flexDirection:"column", gap:0, border:`1px solid ${C.border}` }}>
                   {[
                     { label:"Acrylic Specialist",    icon:"💎", color:C.pink },
-                    { label:"SNS Expert",            icon:"✨", color:C.lav  },
                     { label:"Custom Nail Art",       icon:"🎨", color:C.mint },
                     { label:"Mobile — Comes to You", icon:"🚗", color:C.rose },
                     { label:"Columbus, OH Based",    icon:"📍", color:C.sky  },
@@ -550,7 +548,6 @@ export default function HazeEffect() {
                 <div style={{ border:`1px solid ${C.border}` }}>
                   {[
                     { label:"Acrylic Specialist",    icon:"💎", color:C.pink },
-                    { label:"SNS Expert",            icon:"✨", color:C.lav  },
                     { label:"Custom Nail Art",       icon:"🎨", color:C.mint },
                     { label:"Mobile — Comes to You", icon:"🚗", color:C.rose },
                     { label:"Columbus, OH Based",    icon:"📍", color:C.sky  },
@@ -722,13 +719,17 @@ export default function HazeEffect() {
                     </div>
                   ))}
                   <div>
+                    <label className="lbl">Service Address * <span style={{ color:C.lav, fontSize:9, letterSpacing:1 }}>— Natasha comes to you!</span></label>
+                    <input className="fld" type="text" placeholder="Street address, City, State, ZIP" value={address} onChange={e=>setAddress(e.target.value)} />
+                  </div>
+                  <div>
                     <label className="lbl">Special Requests / Inspo (optional)</label>
-                    <textarea className="fld" placeholder="Describe your vision, attach inspo, or share any notes..." value={notes} onChange={e=>setNotes(e.target.value)} />
+                    <textarea className="fld" placeholder="Describe your vision, share inspo or any notes for Natasha..." value={notes} onChange={e=>setNotes(e.target.value)} />
                   </div>
                 </div>
                 <div style={{ display:"flex", justifyContent:"space-between" }}>
                   <button className="btn-ghost" onClick={()=>setStep(2)}>← Back</button>
-                  <button className="btn-main" disabled={!name||!phone||!email} onClick={()=>setStep(4)}>Next →</button>
+                  <button className="btn-main" disabled={!name||!phone||!email||!address} onClick={()=>setStep(4)}>Next →</button>
                 </div>
               </div>
 
@@ -739,7 +740,7 @@ export default function HazeEffect() {
                   <div style={{ position:"absolute", top:0, left:0, right:0, height:2, background:`linear-gradient(90deg,${C.pink},${C.lav},${C.mint})` }} />
                   <div className="dm" style={{ fontSize:10, letterSpacing:2, color:C.lav, textTransform:"uppercase", fontWeight:600, marginBottom:16 }}>✦ Booking Summary</div>
                   <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:12, marginBottom:20 }}>
-                    {[["Service",selSvc?.name],["Price",selSvc?.price],["Date",selDate&&fmtDate(new Date(selDate+"T12:00:00"))],["Time",selTime],["Client",name],["Phone",phone]].map(([l,v])=>(
+                    {[["Service",selSvc?.name],["Price",selSvc?.price],["Date",selDate&&fmtDate(new Date(selDate+"T12:00:00"))],["Time",selTime],["Client",name],["Phone",phone],["Address",address]].map(([l,v])=>(
                       <div key={l}>
                         <div className="dm" style={{ fontSize:9, color:C.dim, fontWeight:600, letterSpacing:1.5, textTransform:"uppercase", marginBottom:3 }}>{l}</div>
                         <div className="dm" style={{ fontWeight:500, fontSize:13, color:C.chrome }}>{v}</div>
