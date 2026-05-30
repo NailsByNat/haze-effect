@@ -115,13 +115,36 @@ export default function HazeEffect() {
   const [address, setAddress]   = useState("");
   const [agreed, setAgreed]     = useState(false);
   const [confirmed, setConfirmed] = useState(false);
-  const [openFaq, setOpenFaq]   = useState(null);
 
   const today = new Date();
   const dates = Array.from({length:14},(_,i)=>{ const d=new Date(today); d.setDate(today.getDate()+i+1); return d; });
   const fmtDate = d => d.toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"});
   const resetBooking = () => { setStep(1);setSelSvc(null);setSelDate("");setSelTime("");setName("");setPhone("");setEmail("");setNotes("");setAddress("");setAgreed(false);setConfirmed(false); };
   const nav = p => { setPage(p); setMenuOpen(false); if(p!=="book") resetBooking(); window.scrollTo(0,0); };
+
+  const submitToFormspree = async () => {
+    try {
+      await fetch("https://formspree.io/f/xdajjywb", {
+        method:"POST",
+        headers:{ "Content-Type":"application/json" },
+        body: JSON.stringify({
+          "Client Name": name,
+          "Phone Number": phone,
+          "Email": email,
+          "Service": selSvc?.name,
+          "Price": selSvc?.price,
+          "Date": selDate && fmtDate(new Date(selDate+"T12:00:00")),
+          "Time": selTime,
+          "Service Address": address,
+          "Special Requests": notes,
+          "_subject": `New Booking — ${name} — ${selSvc?.name}`,
+          "_replyto": email,
+        }),
+      });
+    } catch(e) {
+      console.log("Formspree error:", e);
+    }
+  };
 
   return (
     <div style={{ fontFamily:"'DM Sans',sans-serif", background:C.bg, minHeight:"100vh", color:C.text, overflowX:"hidden", position:"relative" }}>
@@ -815,7 +838,7 @@ export default function HazeEffect() {
 
                 <div style={{ display:"flex", justifyContent:"space-between" }}>
                   <button className="btn-ghost" onClick={()=>setStep(3)}>← Back</button>
-                  <button className="btn-main" disabled={!agreed} onClick={()=>setConfirmed(true)}>
+                  <button className="btn-main" disabled={!agreed} onClick={()=>{ submitToFormspree(); setConfirmed(true); }}>
                     Confirm Booking ✦
                   </button>
                 </div>
