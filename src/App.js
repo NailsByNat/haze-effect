@@ -725,7 +725,7 @@ export default function HazeEffect() {
                 <a href="https://square.link/u/OyBkF4Hy" target="_blank" rel="noopener noreferrer" style={{ textDecoration:"none", display:"block", marginBottom:16 }}>
                   <button className="btn-main" style={{ width:"100%", fontSize:13, padding:"16px" }}>Pay $10 Deposit Now 💳</button>
                 </a>
-                <p className="dm" style={{ fontSize:11, color:C.dim, marginBottom:24, textAlign:"center" }}>After payment Natasha will text {phone} to confirm! 📱</p>
+                <p className="dm" style={{ fontSize:11, color:C.dim, marginBottom:24, textAlign:"center" }}>A confirmation will be sent to {phone} after your deposit is received! 📱</p>
                 <button className="btn-ghost" style={{ width:"100%" }} onClick={()=>{ resetBooking(); nav("home"); }}>Back to Home</button>
               </div>
 
@@ -821,7 +821,7 @@ export default function HazeEffect() {
                       "All deposits are non-refundable — no exceptions. This policy is strictly enforced.",
                       "Your appointment is NOT confirmed until your deposit has been received.",
                       "If your appointment is cancelled or rescheduled for any reason, a new deposit will be required to rebook.",
-                      "Natasha will reach out via text to confirm your booking after your deposit is received.",
+                      "Once your deposit is received your appointment is confirmed — see you soon! ✦",
                     ].map((t,i)=>(
                       <div key={i} className="dm" style={{ fontSize:12, color:C.muted, display:"flex", gap:10, alignItems:"flex-start", lineHeight:1.7, fontWeight:300 }}>
                         <span style={{ color:C.lav, flexShrink:0, marginTop:2 }}>✦</span>{t}
