@@ -487,8 +487,8 @@ export default function HazeEffect() {
                 <button className="btn-main" style={{ marginTop:12 }} onClick={()=>nav("book")}>Book with Natasha ✦</button>
               </div>
               <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
-                <div style={{ background:"rgba(240,238,232,.9)", border:`1px solid ${C.border}`, borderRadius:4, height:260, display:"flex", alignItems:"center", justifyContent:"center", marginBottom:8, position:"relative", overflow:"hidden" }}>
-                  <img src="/natasha.jpg" alt="Natasha Garnes" style={{ width:"100%", height:"100%", objectFit:"cover", objectPosition:"center top" }} />
+                <div style={{ background:"rgba(240,238,232,.9)", border:`1px solid ${C.border}`, borderRadius:4, height:360, display:"flex", alignItems:"center", justifyContent:"center", marginBottom:8, position:"relative", overflow:"hidden" }}>
+                  <img src="/natasha.jpg" alt="Natasha Garnes" style={{ width:"100%", height:"100%", objectFit:"cover", objectPosition:"center 20%", transform:"rotate(0deg) scale(1.1)" }} />
                   <div style={{ position:"absolute", bottom:0, left:0, right:0, background:"linear-gradient(to top, rgba(0,0,0,.6), transparent)", padding:"16px 20px" }}>
                     <div className="cg" style={{ fontSize:18, fontWeight:300, fontStyle:"italic", color:"#fff" }}>Natasha Garnes</div>
                     <div className="dm" style={{ fontSize:9, letterSpacing:3, color:"rgba(255,255,255,.7)", marginTop:4 }}>MOBILE NAIL TECH · COLUMBUS OH</div>
