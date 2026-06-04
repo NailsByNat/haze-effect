@@ -278,11 +278,6 @@ export default function HazeEffect() {
                     Natasha Garnes is Columbus's premier mobile acrylic specialist — bringing luxury nail art directly to you. Manicures, pedicures, acrylics & custom artwork at your doorstep.
                   </p>
                 </div>
-                <div className="fu" style={{ display:"flex", gap:14, flexWrap:"wrap", animationDelay:".28s" }}>
-                  <button className="btn-main" style={{ fontSize:13, padding:"18px 52px" }} onClick={()=>nav("book")}>Book Your Appointment ✦</button>
-                  <button className="btn-ghost" onClick={()=>nav("services")}>View Services</button>
-                </div>
-                <p className="dm fu" style={{ fontSize:11, color:C.dim, marginTop:12, fontWeight:300, animationDelay:".32s" }}>✦ Tap any service below to book instantly</p>
               </div>
               <div style={{ position:"absolute", right:"8%", top:"45%", transform:"translateY(-50%)", fontSize:80, opacity:.08, animation:"float 4s ease-in-out infinite", userSelect:"none" }}>💎</div>
             </div>
