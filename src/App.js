@@ -488,11 +488,10 @@ export default function HazeEffect() {
               </div>
               <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
                 <div style={{ background:"rgba(240,238,232,.9)", border:`1px solid ${C.border}`, borderRadius:4, height:260, display:"flex", alignItems:"center", justifyContent:"center", marginBottom:8, position:"relative", overflow:"hidden" }}>
-                  <div style={{ position:"absolute", inset:0, background:`radial-gradient(circle,${C.lav}18,transparent 70%)` }} />
-                  <div style={{ textAlign:"center", position:"relative" }}>
-                    <div style={{ fontSize:64, marginBottom:10 }}>💅</div>
-                    <div className="cg" style={{ fontSize:18, fontWeight:300, fontStyle:"italic", color:C.chrome }}>Natasha Garnes</div>
-                    <div className="dm" style={{ fontSize:9, letterSpacing:3, color:C.dim, marginTop:4 }}>MOBILE NAIL TECH · COLUMBUS OH</div>
+                  <img src="/natasha.jpg" alt="Natasha Garnes" style={{ width:"100%", height:"100%", objectFit:"cover", objectPosition:"center top" }} />
+                  <div style={{ position:"absolute", bottom:0, left:0, right:0, background:"linear-gradient(to top, rgba(0,0,0,.6), transparent)", padding:"16px 20px" }}>
+                    <div className="cg" style={{ fontSize:18, fontWeight:300, fontStyle:"italic", color:"#fff" }}>Natasha Garnes</div>
+                    <div className="dm" style={{ fontSize:9, letterSpacing:3, color:"rgba(255,255,255,.7)", marginTop:4 }}>MOBILE NAIL TECH · COLUMBUS OH</div>
                   </div>
                 </div>
                 <div style={{ border:`1px solid ${C.border}` }}>
