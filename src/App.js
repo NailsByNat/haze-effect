@@ -88,7 +88,7 @@ export default function HazeEffect() {
   const [page, setPage]           = useState("home");
   const [menuOpen, setMenuOpen]   = useState(false);
   const [step, setStep]           = useState(1);
-  const [selSvc, setSelSvc]       = useState(null);
+  const [selSvc, setSelSvc]       = useState([]);
   const [selDate, setSelDate]     = useState("");
   const [selTime, setSelTime]     = useState("");
   const [name, setName]           = useState("");
@@ -131,7 +131,7 @@ export default function HazeEffect() {
   const today = new Date();
   const dates = Array.from({length:14},(_,i)=>{ const d=new Date(today); d.setDate(today.getDate()+i+1); return d; });
   const fmtDate = d => d.toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"});
-  const resetBooking = () => { setStep(1);setSelSvc(null);setSelDate("");setSelTime("");setName("");setPhone("");setEmail("");setNotes("");setAddress("");setAgreed(false);setConfirmed(false); };
+  const resetBooking = () => { setStep(1);setSelSvc([]);setSelDate("");setSelTime("");setName("");setPhone("");setEmail("");setNotes("");setAddress("");setAgreed(false);setConfirmed(false); };
   const nav = p => { setPage(p); setMenuOpen(false); if(p!=="book") resetBooking(); window.scrollTo(0,0); };
 
   const submitToFormspree = async () => {
@@ -141,7 +141,8 @@ export default function HazeEffect() {
         headers:{ "Content-Type":"application/json" },
         body: JSON.stringify({
           "Client Name": name, "Phone Number": phone, "Email": email,
-          "Service": selSvc?.name, "Price": selSvc?.price,
+          "Service": selSvc.map(s=>s.name).join(", "),
+          "Price": selSvc.map(s=>s.price).join(", "),
           "Date": selDate && fmtDate(new Date(selDate+"T12:00:00")),
           "Time": selTime, "Service Address": address, "Special Requests": notes,
           "_subject": `New Booking — ${name} — ${selSvc?.name}`,
@@ -278,9 +279,10 @@ export default function HazeEffect() {
                   </p>
                 </div>
                 <div className="fu" style={{ display:"flex", gap:14, flexWrap:"wrap", animationDelay:".28s" }}>
-                  <button className="btn-main" onClick={()=>nav("book")}>Book Your Appointment ✦</button>
+                  <button className="btn-main" style={{ fontSize:13, padding:"18px 52px" }} onClick={()=>nav("book")}>Book Your Appointment ✦</button>
                   <button className="btn-ghost" onClick={()=>nav("services")}>View Services</button>
                 </div>
+                <p className="dm fu" style={{ fontSize:11, color:C.dim, marginTop:12, fontWeight:300, animationDelay:".32s" }}>✦ Tap any service below to book instantly</p>
               </div>
               <div style={{ position:"absolute", right:"8%", top:"45%", transform:"translateY(-50%)", fontSize:80, opacity:.08, animation:"float 4s ease-in-out infinite", userSelect:"none" }}>💎</div>
             </div>
@@ -315,14 +317,15 @@ export default function HazeEffect() {
                 </div>
                 <div className="two-col" style={{ display:"grid", gridTemplateColumns:"repeat(2,1fr)", gap:14 }}>
                   {services.slice(0,4).map((s,i)=>(
-                    <div key={s.id} className="svc-card fu" style={{ "--acc":s.accent, animationDelay:`${i*.07}s` }}>
+                    <div key={s.id} className="svc-card fu" onClick={()=>{ setSelSvc([s]); nav("book"); }} style={{ "--acc":s.accent, animationDelay:`${i*.07}s`, cursor:"pointer" }}>
                       <div style={{ position:"absolute", top:0, left:0, bottom:0, width:2, background:s.accent, opacity:.6 }} />
                       <div className="dm" style={{ fontSize:8, letterSpacing:3, color:s.accent, textTransform:"uppercase", marginBottom:12, fontWeight:600 }}>{s.tag}</div>
                       <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:10 }}>
                         <div className="cg" style={{ fontSize:22, fontWeight:300 }}>{s.name}</div>
                         <div className="dm" style={{ fontSize:14, fontWeight:600, color:s.accent }}>{s.price}</div>
                       </div>
-                      <div className="dm" style={{ fontSize:12, color:"#0A0806", lineHeight:1.8, fontWeight:400 }}>{s.desc}</div>
+                      <div className="dm" style={{ fontSize:12, color:"#0A0806", lineHeight:1.8, fontWeight:400, marginBottom:12 }}>{s.desc}</div>
+                      <div className="dm" style={{ fontSize:10, color:s.accent, fontWeight:600, letterSpacing:1.5, textTransform:"uppercase" }}>Tap to Book ✦</div>
                     </div>
                   ))}
                 </div>
@@ -427,7 +430,7 @@ export default function HazeEffect() {
                     <div className="dm" style={{ fontSize:15, fontWeight:600, color:s.accent }}>{s.price}</div>
                   </div>
                   <div className="dm" style={{ fontSize:12, color:"#0A0806", lineHeight:1.8, fontWeight:400, marginBottom:16 }}>{s.desc}</div>
-                  <button className="btn-sm" style={{ color:s.accent, borderColor:s.accent }} onClick={()=>{ setSelSvc(s); nav("book"); }}>Book This ✦</button>
+                  <button className="btn-sm" style={{ color:s.accent, borderColor:s.accent }} onClick={()=>{ setSelSvc([s]); nav("book"); }}>Book This ✦</button>
                 </div>
               ))}
             </div>
@@ -599,7 +602,7 @@ export default function HazeEffect() {
                 <div style={{ fontSize:48, marginBottom:16 }}>✦</div>
                 <h2 className="cg" style={{ fontSize:"clamp(28px,4vw,40px)", fontWeight:300, marginBottom:10 }}>You're booked, <em style={glitterText}>{name.split(" ")[0]}!</em></h2>
                 <div style={{ width:40, height:1, background:C.lav, margin:"0 auto 24px" }} />
-                <p className="dm" style={{ color:C.muted, fontSize:14, marginBottom:6, fontWeight:300 }}>{selSvc?.name} · {selSvc?.price}</p>
+                <p className="dm" style={{ color:C.muted, fontSize:14, marginBottom:6, fontWeight:300 }}>{selSvc.map(s=>s.name).join(" + ")} · {selSvc.map(s=>s.price).join(" + ")}</p>
                 <p className="dm" style={{ color:C.lav, fontSize:15, fontWeight:600, marginBottom:8 }}>{selDate && fmtDate(new Date(selDate+"T12:00:00"))} · {selTime}</p>
                 <div style={{ background:"rgba(232,229,220,.85)", border:`1px solid ${C.border}`, borderRadius:4, padding:"16px 20px", margin:"24px 0", textAlign:"left" }}>
                   <div className="dm" style={{ fontSize:10, color:C.lav, fontWeight:600, letterSpacing:2, textTransform:"uppercase", marginBottom:8 }}>✦ Next Step — Pay Your Deposit</div>
@@ -630,21 +633,38 @@ export default function HazeEffect() {
 
             ) : step===1 ? (
               <div className="fu">
-                <span className="lbl">Choose Your Service</span>
+                <span className="lbl">Choose Your Service(s)</span>
+                <p className="dm" style={{ fontSize:12, color:C.dim, marginBottom:16, fontWeight:300 }}>Select one or more services — totals will add up automatically!</p>
                 <div className="two-col" style={{ display:"grid", gridTemplateColumns:"repeat(2,1fr)", gap:10 }}>
-                  {services.map(s=>(
-                    <div key={s.id} className={`svc-card ${selSvc?.id===s.id?"sel":""}`} onClick={()=>setSelSvc(s)} style={{ "--acc":s.accent, padding:"18px" }}>
-                      <div style={{ position:"absolute", top:0, left:0, bottom:0, width:2, background:s.accent, opacity:.6 }} />
-                      <div className="chk">✓</div>
-                      <div className="dm" style={{ fontSize:8, letterSpacing:2, color:s.accent, textTransform:"uppercase", marginBottom:8, fontWeight:600 }}>{s.tag}</div>
-                      <div className="cg" style={{ fontSize:17, fontWeight:300, marginBottom:5 }}>{s.name}</div>
-                      <div className="dm" style={{ fontSize:11, color:C.muted, lineHeight:1.6, marginBottom:10, fontWeight:300 }}>{s.desc}</div>
-                      <div className="dm" style={{ fontWeight:600, color:s.accent, fontSize:13 }}>{s.price}</div>
-                    </div>
-                  ))}
+                  {services.map(s=>{
+                    const isSelected = selSvc.some(sv=>sv.id===s.id);
+                    const toggle = () => setSelSvc(isSelected ? selSvc.filter(sv=>sv.id!==s.id) : [...selSvc, s]);
+                    return (
+                      <div key={s.id} className={`svc-card ${isSelected?"sel":""}`} onClick={toggle} style={{ "--acc":s.accent, padding:"18px" }}>
+                        <div style={{ position:"absolute", top:0, left:0, bottom:0, width:2, background:s.accent, opacity:.6 }} />
+                        <div className="chk">✓</div>
+                        <div className="dm" style={{ fontSize:8, letterSpacing:2, color:s.accent, textTransform:"uppercase", marginBottom:8, fontWeight:600 }}>{s.tag}</div>
+                        <div className="cg" style={{ fontSize:17, fontWeight:300, marginBottom:5 }}>{s.name}</div>
+                        <div className="dm" style={{ fontSize:11, color:C.muted, lineHeight:1.6, marginBottom:10, fontWeight:300 }}>{s.desc}</div>
+                        <div className="dm" style={{ fontWeight:600, color:s.accent, fontSize:13 }}>{s.price}</div>
+                      </div>
+                    );
+                  })}
                 </div>
+                {selSvc.length > 0 && (
+                  <div style={{ marginTop:16, background:`rgba(120,104,192,.08)`, border:`1px solid ${C.lav}44`, borderRadius:4, padding:"14px 18px", display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+                    <div>
+                      <div className="dm" style={{ fontSize:10, color:C.lav, fontWeight:600, letterSpacing:2, textTransform:"uppercase", marginBottom:4 }}>Selected Services</div>
+                      <div className="dm" style={{ fontSize:13, color:C.chrome, fontWeight:500 }}>{selSvc.map(s=>s.name).join(" + ")}</div>
+                    </div>
+                    <div className="dm" style={{ fontSize:15, fontWeight:600, color:C.lav }}>{selSvc.map(s=>s.price).join(" + ")}</div>
+                  </div>
+                )}
+                {selSvc.length > 1 && (
+                  <p className="dm" style={{ fontSize:11, color:C.dim, marginTop:10, fontStyle:"italic" }}>✦ Combo appointments may require additional time — Natasha will confirm your total appointment length after booking.</p>
+                )}
                 <div style={{ marginTop:24, display:"flex", justifyContent:"flex-end" }}>
-                  <button className="btn-main" disabled={!selSvc} onClick={()=>setStep(2)}>Next →</button>
+                  <button className="btn-main" disabled={selSvc.length===0} onClick={()=>setStep(2)}>Next →</button>
                 </div>
               </div>
 
@@ -720,7 +740,7 @@ export default function HazeEffect() {
                   <div style={{ position:"absolute", top:0, left:0, right:0, height:2, background:`linear-gradient(90deg,${C.pink},${C.lav},${C.mint})` }} />
                   <div className="dm" style={{ fontSize:10, letterSpacing:2, color:C.lav, textTransform:"uppercase", fontWeight:600, marginBottom:16 }}>✦ Booking Summary</div>
                   <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:12, marginBottom:20 }}>
-                    {[["Service",selSvc?.name],["Price",selSvc?.price],["Date",selDate&&fmtDate(new Date(selDate+"T12:00:00"))],["Time",selTime],["Client",name],["Phone",phone],["Address",address]].map(([l,v])=>(
+                    {[["Service",selSvc.map(s=>s.name).join(" + ")],["Price",selSvc.map(s=>s.price).join(" + ")],["Date",selDate&&fmtDate(new Date(selDate+"T12:00:00"))],["Time",selTime],["Client",name],["Phone",phone],["Address",address]].map(([l,v])=>(
                       <div key={l}>
                         <div className="dm" style={{ fontSize:9, color:C.dim, fontWeight:600, letterSpacing:1.5, textTransform:"uppercase", marginBottom:3 }}>{l}</div>
                         <div className="dm" style={{ fontWeight:500, fontSize:13, color:C.chrome }}>{v}</div>
@@ -818,9 +838,9 @@ export default function HazeEffect() {
             <div style={{ textAlign:"center" }}>
               <div className="dm" style={{ fontSize:9, color:C.dim, fontWeight:600, letterSpacing:3, textTransform:"uppercase", marginBottom:12 }}>Ready for your next set?</div>
               <p className="cg" style={{ fontSize:24, fontWeight:300, fontStyle:"italic", color:C.text, marginBottom:24 }}>I'd love to have you back. 💜</p>
-              <a href="https://square.link/u/OyBkF4Hy" target="_blank" rel="noopener noreferrer" style={{ textDecoration:"none" }}>
-                <button className="btn-main" style={{ fontSize:12, padding:"16px 40px" }}>Book Your Next Appointment ✦</button>
-              </a>
+              <button className="btn-main" style={{ fontSize:12, padding:"16px 40px" }} onClick={()=>nav("book")}>
+                Book Your Next Appointment ✦
+              </button>
             </div>
           </div>
         )}
