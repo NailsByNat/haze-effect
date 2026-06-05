@@ -128,7 +128,20 @@ export default function HazeEffect() {
     return `(${digits.slice(0,3)}) ${digits.slice(3,6)}-${digits.slice(6)}`;
   };
 
-  const today = new Date();
+  const isTimeAvailable = (timeStr, dateStr) => {
+    if (!dateStr) return true;
+    const todayStr = new Date().toISOString().split("T")[0];
+    if (dateStr !== todayStr) return true;
+    const now = new Date();
+    const [time, meridiem] = timeStr.split(" ");
+    let [hours, minutes] = time.split(":").map(Number);
+    if (meridiem === "PM" && hours !== 12) hours += 12;
+    if (meridiem === "AM" && hours === 12) hours = 0;
+    const bookingTime = new Date();
+    bookingTime.setHours(hours, minutes, 0, 0);
+    const oneHourFromNow = new Date(now.getTime() + 60 * 60 * 1000);
+    return bookingTime >= oneHourFromNow;
+  };
   const dates = Array.from({length:14},(_,i)=>{ const d=new Date(today); d.setDate(today.getDate()+i); return d; });
   const fmtDate = d => d.toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"});
   const resetBooking = () => { setStep(1);setSelSvc([]);setSelDate("");setSelTime("");setName("");setPhone("");setEmail("");setNotes("");setAddress("");setAgreed(false);setConfirmed(false); };
@@ -676,7 +689,19 @@ export default function HazeEffect() {
                 </div>
                 <span className="lbl">Pick a Time</span>
                 <div style={{ display:"flex", flexWrap:"wrap", gap:8, marginBottom:32 }}>
-                  {times.map(t=><div key={t} className={`tc ${selTime===t?"s":""}`} onClick={()=>setSelTime(t)}>{t}</div>)}
+                  {times.map(t => {
+                    const available = isTimeAvailable(t, selDate);
+                    return (
+                      <div
+                        key={t}
+                        className={`tc ${selTime===t&&available?"s":""}`}
+                        onClick={()=>available&&setSelTime(t)}
+                        style={{ opacity:available?1:.35, cursor:available?"pointer":"not-allowed", textDecoration:available?"none":"line-through" }}
+                      >
+                        {t}
+                      </div>
+                    );
+                  })}
                 </div>
                 <div style={{ display:"flex", justifyContent:"space-between" }}>
                   <button className="btn-ghost" onClick={()=>setStep(1)}>← Back</button>
