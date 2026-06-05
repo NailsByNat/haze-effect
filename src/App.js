@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const C = {
   bg:      "#F0EEE8",
@@ -83,6 +83,29 @@ const gallery = [
 ];
 
 const times = ["9:00 AM","9:30 AM","10:00 AM","10:30 AM","11:00 AM","12:00 PM","1:00 PM","2:00 PM","2:30 PM","3:00 PM","4:00 PM","4:30 PM","5:00 PM"];
+
+// ── SQUARE BOOKING WIDGET ────────────────────────────────
+function SquareBooking() {
+  useEffect(() => {
+    const existing = document.getElementById("square-booking-script");
+    if (!existing) {
+      const script = document.createElement("script");
+      script.id = "square-booking-script";
+      script.src = "https://app.squareup.com/appointments/buyer/widget/uzxz7io27doyed/LPZD5619628Y4.js";
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    return () => {
+      const s = document.getElementById("square-booking-script");
+      if (s) s.remove();
+    };
+  }, []);
+  return (
+    <div style={{ minHeight:600, background:"rgba(250,250,248,.5)", border:`1px solid var(--color-border)`, borderRadius:4, padding:"20px", display:"flex", alignItems:"center", justifyContent:"center" }}>
+      <div id="square-appointment-booking" style={{ width:"100%" }} />
+    </div>
+  );
+}
 
 export default function HazeEffect() {
   const [page, setPage]           = useState("home");
@@ -585,221 +608,17 @@ export default function HazeEffect() {
 
         {/* ══ BOOK ══ */}
         {page==="book" && (
-          <div className="sec-pad" style={{ maxWidth:680, margin:"0 auto", padding:"60px 32px" }}>
+          <div className="sec-pad" style={{ maxWidth:860, margin:"0 auto", padding:"60px 32px 80px" }}>
             <div style={{ marginBottom:40 }}>
               <div className="dm" style={{ fontSize:9, letterSpacing:4, color:C.dim, textTransform:"uppercase", marginBottom:14, display:"flex", alignItems:"center", gap:10 }}>
                 <div style={{ width:20, height:1, background:C.dim }} />Reservations
               </div>
               <h1 className="cg" style={{ fontSize:"clamp(36px,5vw,56px)", fontWeight:300, ...glitterText }}>Book with <em style={glitterText}>Haze</em></h1>
+              <p className="dm" style={{ fontSize:13, color:C.dim, marginTop:12, fontWeight:300 }}>Select your service, pick a date and time, and complete your booking below. A $10 non-refundable deposit is required to confirm your appointment.</p>
             </div>
-
-            {!confirmed && (
-              <div style={{ marginBottom:32 }}>
-                <div style={{ display:"flex", justifyContent:"space-between", marginBottom:10 }}>
-                  {["1. Service","2. Date & Time","3. Your Info","4. Deposit"].map((s,i)=>(
-                    <div key={i} className="dm" style={{ fontSize:9, fontWeight:600, letterSpacing:1.5, textTransform:"uppercase", color:step>i+1?C.mint:step===i+1?C.lav:C.border }}>{step>i+1?"✓ ":""}{s}</div>
-                  ))}
-                </div>
-                <div className="prog"><div className="prog-fill" style={{ width:`${(step/4)*100}%` }} /></div>
-              </div>
-            )}
-
-            {confirmed ? (
-              <div className="pop" style={{ background:"rgba(250,250,248,.95)", border:`1px solid ${C.border}`, borderRadius:4, padding:"52px 40px", textAlign:"center", position:"relative", overflow:"hidden" }}>
-                <div style={{ position:"absolute", top:0, left:0, right:0, height:2, background:`linear-gradient(90deg,${C.pink},${C.lav},${C.mint})` }} />
-                <div style={{ fontSize:48, marginBottom:16 }}>✦</div>
-                <h2 className="cg" style={{ fontSize:"clamp(28px,4vw,40px)", fontWeight:300, marginBottom:10 }}>You're booked, <em style={glitterText}>{name.split(" ")[0]}!</em></h2>
-                <div style={{ width:40, height:1, background:C.lav, margin:"0 auto 24px" }} />
-                <p className="dm" style={{ color:C.muted, fontSize:14, marginBottom:6, fontWeight:300 }}>{selSvc.map(s=>s.name).join(" + ")} · {selSvc.map(s=>s.price).join(" + ")}</p>
-                <p className="dm" style={{ color:C.lav, fontSize:15, fontWeight:600, marginBottom:8 }}>{selDate && fmtDate(new Date(selDate+"T12:00:00"))} · {selTime}</p>
-                <div style={{ background:"rgba(232,229,220,.85)", border:`1px solid ${C.border}`, borderRadius:4, padding:"16px 20px", margin:"24px 0", textAlign:"left" }}>
-                  <div className="dm" style={{ fontSize:10, color:C.lav, fontWeight:600, letterSpacing:2, textTransform:"uppercase", marginBottom:8 }}>✦ Next Step — Pay Your Deposit</div>
-                  <p className="dm" style={{ fontSize:12, color:"#3A3530", lineHeight:1.7, fontWeight:400 }}>Your booking request has been submitted. However <strong>your appointment is only confirmed once your $10 deposit has been received.</strong> All deposits are non-refundable — no exceptions. Click below to pay securely via Square!</p>
-                </div>
-                <a href="https://square.link/u/OyBkF4Hy" target="_blank" rel="noopener noreferrer" style={{ textDecoration:"none", display:"block", marginBottom:16 }}>
-                  <button className="btn-main" style={{ width:"100%", fontSize:13, padding:"16px" }}>Pay $10 Deposit Now 💳</button>
-                </a>
-                <p className="dm" style={{ fontSize:11, color:C.dim, marginBottom:24, textAlign:"center" }}>A confirmation email will be sent to {email} once your deposit is received! 📱</p>
-
-                {/* ── REVIEW PROMPT ── */}
-                <div style={{ background:`rgba(168,128,64,.08)`, border:`1px solid ${C.gold}44`, borderRadius:4, padding:"20px 24px", marginBottom:16, textAlign:"left" }}>
-                  <div className="dm" style={{ fontSize:10, letterSpacing:2, color:C.gold, textTransform:"uppercase", fontWeight:600, marginBottom:8 }}>💅 After your appointment</div>
-                  <p className="dm" style={{ fontSize:12, color:C.muted, lineHeight:1.7, fontWeight:300, marginBottom:12 }}>
-                    Loved your nails? Come back and leave a quick review — it means the world to a small business like mine! 💜
-                  </p>
-                  <button
-                    className="btn-sm"
-                    style={{ color:C.gold, borderColor:C.gold, fontSize:10 }}
-                    onClick={()=>nav("review")}
-                  >
-                    Leave a Review After Your Appointment ⭐
-                  </button>
-                </div>
-
-                <button className="btn-ghost" style={{ width:"100%" }} onClick={()=>{ resetBooking(); nav("home"); }}>Back to Home</button>
-              </div>
-
-            ) : step===1 ? (
-              <div className="fu">
-                <span className="lbl">Choose Your Service(s)</span>
-                <p className="dm" style={{ fontSize:12, color:C.dim, marginBottom:16, fontWeight:300 }}>Select one or more services — totals will add up automatically!</p>
-                <div className="two-col" style={{ display:"grid", gridTemplateColumns:"repeat(2,1fr)", gap:10 }}>
-                  {services.map(s=>{
-                    const isSelected = selSvc.some(sv=>sv.id===s.id);
-                    const toggle = () => setSelSvc(isSelected ? selSvc.filter(sv=>sv.id!==s.id) : [...selSvc, s]);
-                    return (
-                      <div key={s.id} className={`svc-card ${isSelected?"sel":""}`} onClick={toggle} style={{ "--acc":s.accent, padding:"18px" }}>
-                        <div style={{ position:"absolute", top:0, left:0, bottom:0, width:2, background:s.accent, opacity:.6 }} />
-                        <div className="chk">✓</div>
-                        <div className="dm" style={{ fontSize:8, letterSpacing:2, color:s.accent, textTransform:"uppercase", marginBottom:8, fontWeight:600 }}>{s.tag}</div>
-                        <div className="cg" style={{ fontSize:17, fontWeight:300, marginBottom:5 }}>{s.name}</div>
-                        <div className="dm" style={{ fontSize:11, color:C.muted, lineHeight:1.6, marginBottom:10, fontWeight:300 }}>{s.desc}</div>
-                        <div className="dm" style={{ fontWeight:600, color:s.accent, fontSize:13 }}>{s.price}</div>
-                      </div>
-                    );
-                  })}
-                </div>
-                {selSvc.length > 0 && (
-                  <div style={{ marginTop:16, background:`rgba(120,104,192,.08)`, border:`1px solid ${C.lav}44`, borderRadius:4, padding:"14px 18px", display:"flex", justifyContent:"space-between", alignItems:"center" }}>
-                    <div>
-                      <div className="dm" style={{ fontSize:10, color:C.lav, fontWeight:600, letterSpacing:2, textTransform:"uppercase", marginBottom:4 }}>Selected Services</div>
-                      <div className="dm" style={{ fontSize:13, color:C.chrome, fontWeight:500 }}>{selSvc.map(s=>s.name).join(" + ")}</div>
-                    </div>
-                    <div className="dm" style={{ fontSize:15, fontWeight:600, color:C.lav }}>{selSvc.map(s=>s.price).join(" + ")}</div>
-                  </div>
-                )}
-                {selSvc.length > 1 && (
-                  <p className="dm" style={{ fontSize:11, color:C.dim, marginTop:10, fontStyle:"italic" }}>✦ Combo appointments may require additional time — Natasha will confirm your total appointment length after booking.</p>
-                )}
-                <div style={{ marginTop:24, display:"flex", justifyContent:"flex-end" }}>
-                  <button className="btn-main" disabled={selSvc.length===0} onClick={()=>setStep(2)}>Next →</button>
-                </div>
-              </div>
-
-            ) : step===2 ? (
-              <div className="fu">
-                <span className="lbl">Pick a Date</span>
-                <div style={{ display:"flex", gap:8, overflowX:"auto", paddingBottom:10, marginBottom:28 }}>
-                  {dates.map((d,i)=>{ const val=d.toISOString().split("T")[0]; return (
-                    <div key={i} className={`dc ${selDate===val?"s":""}`} onClick={()=>setSelDate(val)}>
-                      <div style={{ fontSize:9, marginBottom:2, opacity:.7 }}>{d.toLocaleDateString("en-US",{weekday:"short"})}</div>
-                      <div style={{ fontSize:15, fontWeight:700 }}>{d.getDate()}</div>
-                      <div style={{ fontSize:9, opacity:.7 }}>{d.toLocaleDateString("en-US",{month:"short"})}</div>
-                    </div>
-                  );})}
-                </div>
-                <span className="lbl">Pick a Time</span>
-                <div style={{ display:"flex", flexWrap:"wrap", gap:8, marginBottom:32 }}>
-                  {times.map(t => {
-                    const available = isTimeAvailable(t, selDate);
-                    return (
-                      <div
-                        key={t}
-                        className={`tc ${selTime===t&&available?"s":""}`}
-                        onClick={()=>available&&setSelTime(t)}
-                        style={{ opacity:available?1:.35, cursor:available?"pointer":"not-allowed", textDecoration:available?"none":"line-through" }}
-                      >
-                        {t}
-                      </div>
-                    );
-                  })}
-                </div>
-                <div style={{ display:"flex", justifyContent:"space-between" }}>
-                  <button className="btn-ghost" onClick={()=>setStep(1)}>← Back</button>
-                  <button className="btn-main" disabled={!selDate||!selTime} onClick={()=>setStep(3)}>Next →</button>
-                </div>
-              </div>
-
-            ) : step===3 ? (
-              <div className="fu">
-                <span className="lbl">Your Details</span>
-                <div style={{ display:"flex", flexDirection:"column", gap:14, marginBottom:28 }}>
-                  <div>
-                    <label className="lbl">Full Name *</label>
-                    <input className="fld" type="text" placeholder="Your name" value={name} onChange={e=>setName(e.target.value)} />
-                  </div>
-                  <div>
-                    <label className="lbl">Phone Number *</label>
-                    <input className="fld" type="tel" placeholder="(614) 000-0000" value={phone} onChange={e=>setPhone(formatPhone(e.target.value))} maxLength={14} />
-                  </div>
-                  <div>
-                    <label className="lbl">Email *</label>
-                    <input className="fld" type="email" placeholder="your@email.com" value={email} onChange={e=>setEmail(e.target.value)} />
-                  </div>
-                  <div>
-                    <label className="lbl">Service Address * <span style={{ color:C.lav, fontSize:9, letterSpacing:1 }}>— Natasha comes to you!</span></label>
-                    <input
-                      className="fld"
-                      type="text"
-                      placeholder="Start typing your address..."
-                      value={address}
-                      onChange={e=>setAddress(e.target.value)}
-                      ref={el => {
-                        if (el) {
-                          loadGooglePlaces();
-                          window.initAutocomplete = () => initAddressAutocomplete(el);
-                          if (window.google) initAddressAutocomplete(el);
-                        }
-                      }}
-                    />
-                  </div>
-                  <div>
-                    <label className="lbl">Special Requests / Inspo (optional)</label>
-                    <textarea className="fld" placeholder="Describe your vision, share inspo or any notes for Natasha..." value={notes} onChange={e=>setNotes(e.target.value)} />
-                  </div>
-                </div>
-                <div style={{ display:"flex", justifyContent:"space-between" }}>
-                  <button className="btn-ghost" onClick={()=>setStep(2)}>← Back</button>
-                  <button className="btn-main" disabled={!name||!phone||!email||!address} onClick={()=>setStep(4)}>Next →</button>
-                </div>
-              </div>
-
-            ) : (
-              <div className="fu">
-                <div style={{ background:"rgba(250,250,248,.9)", border:`1px solid ${C.lav}44`, borderRadius:4, padding:"28px", marginBottom:24, position:"relative", overflow:"hidden" }}>
-                  <div style={{ position:"absolute", top:0, left:0, right:0, height:2, background:`linear-gradient(90deg,${C.pink},${C.lav},${C.mint})` }} />
-                  <div className="dm" style={{ fontSize:10, letterSpacing:2, color:C.lav, textTransform:"uppercase", fontWeight:600, marginBottom:16 }}>✦ Booking Summary</div>
-                  <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:12, marginBottom:20 }}>
-                    {[["Service",selSvc.map(s=>s.name).join(" + ")],["Price",selSvc.map(s=>s.price).join(" + ")],["Date",selDate&&fmtDate(new Date(selDate+"T12:00:00"))],["Time",selTime],["Client",name],["Phone",phone],["Address",address]].map(([l,v])=>(
-                      <div key={l}>
-                        <div className="dm" style={{ fontSize:9, color:C.dim, fontWeight:600, letterSpacing:1.5, textTransform:"uppercase", marginBottom:3 }}>{l}</div>
-                        <div className="dm" style={{ fontWeight:500, fontSize:13, color:C.chrome }}>{v}</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <div style={{ background:"rgba(184,168,232,.08)", border:`1px solid ${C.lav}44`, borderRadius:4, padding:"24px", marginBottom:24 }}>
-                  <div className="dm" style={{ fontSize:10, letterSpacing:2, color:C.lav, textTransform:"uppercase", fontWeight:600, marginBottom:14 }}>✦ Deposit Required — $10</div>
-                  <div style={{ display:"flex", flexDirection:"column", gap:10, marginBottom:18 }}>
-                    {[
-                      "A $10 deposit is required to secure your appointment with The Haze Effect.",
-                      "All deposits are non-refundable — no exceptions. This policy is strictly enforced.",
-                      "Your appointment is NOT confirmed until your deposit has been received.",
-                      "Need to reschedule? No problem! Reschedules made at least 24 hours in advance keep their deposit — just manage your appointment from your confirmation email.",
-                      "Cancellations or reschedules made less than 24 hours before your appointment will forfeit the deposit and a new deposit will be required to rebook.",
-                      "Once your deposit is received your appointment is confirmed — see you soon! ✦",
-                    ].map((t,i)=>(
-                      <div key={i} className="dm" style={{ fontSize:12, color:C.muted, display:"flex", gap:10, alignItems:"flex-start", lineHeight:1.7, fontWeight:300 }}>
-                        <span style={{ color:C.lav, flexShrink:0, marginTop:2 }}>✦</span>{t}
-                      </div>
-                    ))}
-                  </div>
-                  <label style={{ display:"flex", alignItems:"flex-start", gap:12, cursor:"pointer" }}>
-                    <input type="checkbox" checked={agreed} onChange={e=>setAgreed(e.target.checked)} style={{ marginTop:2, accentColor:C.lav, width:16, height:16, flexShrink:0 }} />
-                    <span className="dm" style={{ fontSize:12, color:C.chrome, lineHeight:1.7, fontWeight:400 }}>
-                      I understand and agree to the deposit policy. I acknowledge that my $10 deposit is <strong>non-refundable</strong>. Reschedules with 24+ hours notice keep their deposit. Cancellations or late reschedules forfeit the deposit and a new deposit will be required to rebook.
-                    </span>
-                  </label>
-                </div>
-                <div style={{ display:"flex", justifyContent:"space-between" }}>
-                  <button className="btn-ghost" onClick={()=>setStep(3)}>← Back</button>
-                  <button className="btn-main" disabled={!agreed} onClick={()=>{ submitToFormspree(); setConfirmed(true); }}>Confirm Booking ✦</button>
-                </div>
-              </div>
-            )}
+            <SquareBooking />
           </div>
         )}
-
         {/* ══ REVIEW ══ */}
         {page==="review" && (
           <div className="sec-pad" style={{ maxWidth:700, margin:"0 auto", padding:"60px 32px 80px" }}>
