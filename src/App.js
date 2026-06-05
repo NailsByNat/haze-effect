@@ -142,6 +142,7 @@ export default function HazeEffect() {
     const oneHourFromNow = new Date(now.getTime() + 60 * 60 * 1000);
     return bookingTime >= oneHourFromNow;
   };
+  const today = new Date();
   const dates = Array.from({length:14},(_,i)=>{ const d=new Date(today); d.setDate(today.getDate()+i); return d; });
   const fmtDate = d => d.toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"});
   const resetBooking = () => { setStep(1);setSelSvc([]);setSelDate("");setSelTime("");setName("");setPhone("");setEmail("");setNotes("");setAddress("");setAgreed(false);setConfirmed(false); };
