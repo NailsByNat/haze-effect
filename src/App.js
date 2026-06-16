@@ -190,8 +190,8 @@ export default function HazeEffect() {
     const isBooked = bookedSlots.some(slot => {
       if (slot.date !== dateStr) return false;
       const bookedMinutes = toMinutes(slot.time);
-      // Block the booked slot AND the next 3 hours (180 minutes)
-      return slotMinutes >= bookedMinutes && slotMinutes < bookedMinutes + 180;
+      // Block the booked slot AND the next 3.5 hours (210 minutes)
+      return slotMinutes >= bookedMinutes && slotMinutes < bookedMinutes + 210;
     });
 
     if (isBooked) return false;
