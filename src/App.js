@@ -1,4 +1,38 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+// ── SUPABASE CONNECTION ──────────────────────────────────
+const SUPABASE_URL = "https://icqbkjsjlkcbcmiwbfbf.supabase.co";
+const SUPABASE_KEY = "sb_publishable_Pj_AsPBgaJxv1qEL1iP33A_D-EFeTdy";
+
+const supabase = {
+  from: (table) => ({
+    insert: async (data) => {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": SUPABASE_KEY,
+          "Authorization": `Bearer ${SUPABASE_KEY}`,
+          "Prefer": "return=minimal",
+        },
+        body: JSON.stringify(data),
+      });
+      return { error: res.ok ? null : await res.json() };
+    },
+    select: async (columns="*", filters={}) => {
+      let url = `${SUPABASE_URL}/rest/v1/${table}?select=${columns}`;
+      Object.entries(filters).forEach(([k,v]) => { url += `&${k}=eq.${v}`; });
+      const res = await fetch(url, {
+        headers: {
+          "apikey": SUPABASE_KEY,
+          "Authorization": `Bearer ${SUPABASE_KEY}`,
+        },
+      });
+      const data = await res.json();
+      return { data, error: res.ok ? null : data };
+    },
+  }),
+};
 
 const C = {
   bg:      "#F0EEE8",
@@ -98,6 +132,16 @@ export default function HazeEffect() {
   const [address, setAddress]     = useState("");
   const [agreed, setAgreed]       = useState(false);
   const [confirmed, setConfirmed] = useState(false);
+  const [bookedSlots, setBookedSlots] = useState([]);
+
+  // Fetch booked slots from Supabase on load
+  useEffect(() => {
+    const fetchBookedSlots = async () => {
+      const { data } = await supabase.from("Bookings").select("date,time");
+      if (data) setBookedSlots(data);
+    };
+    fetchBookedSlots();
+  }, []);
 
   const GOOGLE_API_KEY = "AIzaSyC-n_eLFgaMZV8E85HhghvTEGVVdy04mWI";
 
@@ -130,6 +174,10 @@ export default function HazeEffect() {
 
   const isTimeAvailable = (timeStr, dateStr) => {
     if (!dateStr) return true;
+    // Check if already booked in Supabase
+    const isBooked = bookedSlots.some(slot => slot.date === dateStr && slot.time === timeStr);
+    if (isBooked) return false;
+    // Check if time has passed for today
     const todayStr = new Date().toISOString().split("T")[0];
     if (dateStr !== todayStr) return true;
     const now = new Date();
@@ -148,7 +196,25 @@ export default function HazeEffect() {
   const resetBooking = () => { setStep(1);setSelSvc([]);setSelDate("");setSelTime("");setName("");setPhone("");setEmail("");setNotes("");setAddress("");setAgreed(false);setConfirmed(false); };
   const nav = p => { setPage(p); setMenuOpen(false); if(p!=="book") resetBooking(); window.scrollTo(0,0); };
 
-  const submitToFormspree = async () => {
+  const submitBooking = async () => {
+    // Save to Supabase
+    const { error } = await supabase.from("Bookings").insert({
+      Name: name,
+      Phone: phone,
+      email: email,
+      service: selSvc.map(s=>s.name).join(", "),
+      date: selDate,
+      time: selTime,
+      address: address,
+      notes: notes,
+      created_at: new Date().toISOString(),
+    });
+    if (error) console.log("Supabase error:", error);
+
+    // Update local booked slots so time grays out immediately
+    setBookedSlots(prev => [...prev, { date: selDate, time: selTime }]);
+
+    // Also send to Formspree for email notification
     try {
       await fetch("https://formspree.io/f/xdajjywb", {
         method:"POST",
@@ -159,7 +225,7 @@ export default function HazeEffect() {
           "Price": selSvc.map(s=>s.price).join(", "),
           "Date": selDate && fmtDate(new Date(selDate+"T12:00:00")),
           "Time": selTime, "Service Address": address, "Special Requests": notes,
-          "_subject": `New Booking — ${name} — ${selSvc?.name}`,
+          "_subject": `New Booking — ${name} — ${selSvc.map(s=>s.name).join(", ")}`,
           "_replyto": email,
         }),
       });
@@ -772,7 +838,7 @@ export default function HazeEffect() {
                 </div>
                 <div style={{ display:"flex", justifyContent:"space-between" }}>
                   <button className="btn-ghost" onClick={()=>setStep(3)}>← Back</button>
-                  <button className="btn-main" disabled={!agreed} onClick={()=>{ submitToFormspree(); setConfirmed(true); }}>Confirm Booking ✦</button>
+                  <button className="btn-main" disabled={!agreed} onClick={()=>{ submitBooking(); setConfirmed(true); }}>Confirm Booking ✦</button>
                 </div>
               </div>
             )}
