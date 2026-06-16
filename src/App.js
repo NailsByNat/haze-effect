@@ -116,7 +116,7 @@ const gallery = [
   { img:"/nail16.jpg",  label:"Wild & Refined",    sub:"Nude stiletto with leopard print & silver gems",     accent:C.silver },
 ];
 
-const times = ["9:00 AM","9:30 AM","10:00 AM","10:30 AM","11:00 AM","11:30 AM","12:00 PM","12:30 PM","1:00 PM","1:30 PM","2:00 PM","2:30 PM","3:00 PM","3:30 PM","4:00 PM","4:30 PM","5:00 PM"];
+const times = ["9:00 AM","9:30 AM","10:00 AM","10:30 AM","11:00 AM","11:30 AM","12:00 PM","12:30 PM","1:00 PM","1:30 PM","2:00 PM","2:30 PM","3:00 PM","3:30 PM","4:00 PM","4:30 PM","5:00 PM","5:30 PM","6:00 PM","6:30 PM","7:00 PM","7:30 PM","8:00 PM","8:30 PM","9:00 PM","9:30 PM","10:00 PM"];
 
 export default function HazeEffect() {
   const [page, setPage]           = useState("home");
@@ -190,8 +190,8 @@ export default function HazeEffect() {
     const isBooked = bookedSlots.some(slot => {
       if (slot.date !== dateStr) return false;
       const bookedMinutes = toMinutes(slot.time);
-      // Block the booked slot AND the next 3.5 hours (210 minutes)
-      return slotMinutes >= bookedMinutes && slotMinutes < bookedMinutes + 210;
+      // Block slots within 3.5 hours (210 minutes) — 12:30 PM is first available after 9:00 AM
+      return slotMinutes > bookedMinutes && slotMinutes < bookedMinutes + 210;
     });
 
     if (isBooked) return false;
