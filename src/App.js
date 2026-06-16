@@ -191,7 +191,7 @@ export default function HazeEffect() {
       if (slot.date !== dateStr) return false;
       const bookedMinutes = toMinutes(slot.time);
       // Block slots within 3.5 hours (210 minutes) — 12:30 PM is first available after 9:00 AM
-      return slotMinutes > bookedMinutes && slotMinutes < bookedMinutes + 210;
+      return slotMinutes > bookedMinutes && slotMinutes <= bookedMinutes + 180;
     });
 
     if (isBooked) return false;
