@@ -175,7 +175,7 @@ export default function HazeEffect() {
   const isTimeAvailable = (timeStr, dateStr) => {
     if (!dateStr) return true;
 
-    // Convert a time string like "9:30 AM" to minutes since midnight
+    // Convert a time string like "10:00 AM" to minutes since midnight
     const toMinutes = (t) => {
       const [time, meridiem] = t.split(" ");
       let [hours, minutes] = time.split(":").map(Number);
@@ -186,7 +186,16 @@ export default function HazeEffect() {
 
     const slotMinutes = toMinutes(timeStr);
 
-    // Check if this slot falls within 3 hours of any booked slot on the same date
+    // Block Wednesday mid-day break 12:30 PM — 3:30 PM
+    const selectedDate = new Date(dateStr + "T12:00:00");
+    const isWednesday = selectedDate.getDay() === 3;
+    if (isWednesday) {
+      const breakStart = toMinutes("12:30 PM"); // 750 minutes
+      const breakEnd = toMinutes("3:30 PM");    // 930 minutes
+      if (slotMinutes >= breakStart && slotMinutes < breakEnd) return false;
+    }
+
+    // Check if this slot falls within 3.5 hours of any booked slot on the same date
     const isBooked = bookedSlots.some(slot => {
       if (slot.date !== dateStr) return false;
       const bookedMinutes = toMinutes(slot.time);
