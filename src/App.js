@@ -133,6 +133,11 @@ export default function HazeEffect() {
   const [agreed, setAgreed]       = useState(false);
   const [confirmed, setConfirmed] = useState(false);
   const [bookedSlots, setBookedSlots] = useState([]);
+  const [contactName, setContactName]       = useState("");
+  const [contactEmail, setContactEmail]     = useState("");
+  const [contactPhone, setContactPhone]     = useState("");
+  const [contactMessage, setContactMessage] = useState("");
+  const [contactSent, setContactSent]       = useState(false);
 
   // Fetch booked slots from Supabase on load
   useEffect(() => {
@@ -659,19 +664,51 @@ export default function HazeEffect() {
               <div style={{ background:"rgba(250,250,248,.9)", border:`1px solid ${C.border}`, borderRadius:4, padding:"32px", position:"relative", overflow:"hidden" }}>
                 <div style={{ position:"absolute", top:0, left:0, right:0, height:2, background:`linear-gradient(90deg,${C.pink},${C.lav},${C.mint})` }} />
                 <div className="dm" style={{ fontSize:10, letterSpacing:2, color:C.lav, textTransform:"uppercase", fontWeight:600, marginBottom:20 }}>Send a Message</div>
-                <div style={{ display:"flex", flexDirection:"column", gap:14 }}>
-                  {[["Name","Your name","text"],["Email","your@email.com","email"],["Phone","(614) 000-0000","tel"]].map(([l,ph,t])=>(
-                    <div key={l}>
-                      <label className="lbl">{l}</label>
-                      <input className="fld" type={t} placeholder={ph} />
-                    </div>
-                  ))}
-                  <div>
-                    <label className="lbl">Message</label>
-                    <textarea className="fld" placeholder="Tell me what you're looking for..." />
+                {contactSent ? (
+                  <div style={{ textAlign:"center", padding:"32px 0" }}>
+                    <div style={{ fontSize:40, marginBottom:16 }}>💜</div>
+                    <div className="cg" style={{ fontSize:24, fontWeight:300, marginBottom:8 }}>Message Sent!</div>
+                    <p className="dm" style={{ fontSize:13, color:C.dim, marginBottom:24 }}>Natasha will get back to you soon!</p>
+                    <button className="btn-ghost" onClick={()=>setContactSent(false)}>Send Another</button>
                   </div>
-                  <button className="btn-main">Send Message ✦</button>
-                </div>
+                ) : (
+                  <div style={{ display:"flex", flexDirection:"column", gap:14 }}>
+                    <div>
+                      <label className="lbl">Name</label>
+                      <input className="fld" type="text" placeholder="Your name" value={contactName} onChange={e=>setContactName(e.target.value)} />
+                    </div>
+                    <div>
+                      <label className="lbl">Email</label>
+                      <input className="fld" type="email" placeholder="your@email.com" value={contactEmail} onChange={e=>setContactEmail(e.target.value)} />
+                    </div>
+                    <div>
+                      <label className="lbl">Phone</label>
+                      <input className="fld" type="tel" placeholder="(614) 000-0000" value={contactPhone} onChange={e=>setContactPhone(formatPhone(e.target.value))} maxLength={14} />
+                    </div>
+                    <div>
+                      <label className="lbl">Message</label>
+                      <textarea className="fld" placeholder="Tell me what you're looking for..." value={contactMessage} onChange={e=>setContactMessage(e.target.value)} />
+                    </div>
+                    <button className="btn-main" disabled={!contactName||!contactEmail||!contactMessage} onClick={async()=>{
+                      try {
+                        await fetch("https://formspree.io/f/xdajjywb", {
+                          method:"POST",
+                          headers:{"Content-Type":"application/json"},
+                          body: JSON.stringify({
+                            "Name": contactName,
+                            "Email": contactEmail,
+                            "Phone": contactPhone,
+                            "Message": contactMessage,
+                            "_subject": `New Contact Message from ${contactName}`,
+                            "_replyto": contactEmail,
+                          }),
+                        });
+                        setContactSent(true);
+                        setContactName(""); setContactEmail(""); setContactPhone(""); setContactMessage("");
+                      } catch(e) { console.log("Contact form error:", e); }
+                    }}>Send Message ✦</button>
+                  </div>
+                )}
               </div>
             </div>
           </div>
