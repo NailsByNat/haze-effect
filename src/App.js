@@ -174,18 +174,37 @@ export default function HazeEffect() {
 
   const isTimeAvailable = (timeStr, dateStr) => {
     if (!dateStr) return true;
-    // Check if already booked in Supabase
-    const isBooked = bookedSlots.some(slot => slot.date === dateStr && slot.time === timeStr);
+
+    // Convert a time string like "9:30 AM" to minutes since midnight
+    const toMinutes = (t) => {
+      const [time, meridiem] = t.split(" ");
+      let [hours, minutes] = time.split(":").map(Number);
+      if (meridiem === "PM" && hours !== 12) hours += 12;
+      if (meridiem === "AM" && hours === 12) hours = 0;
+      return hours * 60 + minutes;
+    };
+
+    const slotMinutes = toMinutes(timeStr);
+
+    // Check if this slot falls within 3 hours of any booked slot on the same date
+    const isBooked = bookedSlots.some(slot => {
+      if (slot.date !== dateStr) return false;
+      const bookedMinutes = toMinutes(slot.time);
+      // Block the booked slot AND the next 3 hours (180 minutes)
+      return slotMinutes >= bookedMinutes && slotMinutes < bookedMinutes + 180;
+    });
+
     if (isBooked) return false;
+
     // Check if time has passed for today
     const todayStr = new Date().toISOString().split("T")[0];
     if (dateStr !== todayStr) return true;
     const now = new Date();
+    const bookingTime = new Date();
     const [time, meridiem] = timeStr.split(" ");
     let [hours, minutes] = time.split(":").map(Number);
     if (meridiem === "PM" && hours !== 12) hours += 12;
     if (meridiem === "AM" && hours === 12) hours = 0;
-    const bookingTime = new Date();
     bookingTime.setHours(hours, minutes, 0, 0);
     const oneHourFromNow = new Date(now.getTime() + 60 * 60 * 1000);
     return bookingTime >= oneHourFromNow;
