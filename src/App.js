@@ -191,13 +191,13 @@ export default function HazeEffect() {
 
     const slotMinutes = toMinutes(timeStr);
 
-    // Block Wednesday mid-day break 12:30 PM — 3:30 PM
+    // Block Wednesday break 12:30 PM — 3:30 PM (back at 4:00 PM)
     const selectedDate = new Date(dateStr + "T12:00:00");
     const isWednesday = selectedDate.getDay() === 3;
     if (isWednesday) {
-      const breakStart = toMinutes("12:30 PM"); // 750 minutes
-      const breakEnd = toMinutes("3:30 PM");    // 930 minutes
-      if (slotMinutes >= breakStart && slotMinutes < breakEnd) return false;
+      const breakStart = toMinutes("12:30 PM");
+      const breakEnd = toMinutes("3:30 PM");
+      if (slotMinutes >= breakStart && slotMinutes <= breakEnd) return false;
     }
 
     // Check if this slot falls within 3.5 hours of any booked slot on the same date
@@ -937,7 +937,7 @@ export default function HazeEffect() {
                 <br /><br />
                 <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:12, letterSpacing:1, color:C.dim, fontStyle:"normal" }}>— Natasha @ The Haze Effect</span>
               </p>
-              <a href="PASTE_GOOGLE_REVIEW_LINK_HERE" target="_blank" rel="noopener noreferrer" style={{ textDecoration:"none", display:"block", marginBottom:12 }}>
+              <a href="https://g.page/r/CWoPKg9aaZmeECE/review" target="_blank" rel="noopener noreferrer" style={{ textDecoration:"none", display:"block", marginBottom:12 }}>
                 <button className="btn-main" style={{ width:"100%", fontSize:12, padding:"16px", display:"flex", alignItems:"center", justifyContent:"center", gap:10 }}>
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
                     <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
