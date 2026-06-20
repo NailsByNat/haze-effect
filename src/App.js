@@ -202,13 +202,15 @@ export default function HazeEffect() {
 
     const slotMinutes = toMinutes(timeStr);
 
-    // Block Wednesday break 12:30 PM — 3:30 PM (back at 4:00 PM)
+    // Block Wednesday break — strictly between 12:30 PM and 3:30 PM.
+    // 12:30 PM and 3:30 PM themselves stay bookable since those are
+    // her actual start/end-of-break appointment times.
     const selectedDate = new Date(dateStr + "T12:00:00");
     const isWednesday = selectedDate.getDay() === 3;
     if (isWednesday) {
       const breakStart = toMinutes("12:30 PM");
       const breakEnd = toMinutes("3:30 PM");
-      if (slotMinutes >= breakStart && slotMinutes <= breakEnd) return false;
+      if (slotMinutes > breakStart && slotMinutes < breakEnd) return false;
     }
 
     // Check if this slot falls within 3.5 hours of any booked slot on the same date
