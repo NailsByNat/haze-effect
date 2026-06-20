@@ -118,6 +118,17 @@ const gallery = [
 
 const times = ["10:00 AM","10:30 AM","11:00 AM","11:30 AM","12:00 PM","12:30 PM","1:00 PM","1:30 PM","2:00 PM","2:30 PM","3:00 PM","3:30 PM","4:00 PM","4:30 PM","5:00 PM","5:30 PM","6:00 PM","6:30 PM","7:00 PM","7:30 PM","8:00 PM","8:30 PM","9:00 PM","9:30 PM","10:00 PM"];
 
+// Build a YYYY-MM-DD string from a Date's LOCAL calendar fields.
+// (Date.toISOString() converts to UTC first, which silently shifts the
+// date by a day for anyone west of UTC in the evening — that's what was
+// causing Wednesday's break to land on the Tuesday button.)
+const toLocalISODate = (d) => {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+};
+
 export default function HazeEffect() {
   const [page, setPage]           = useState("home");
   const [menuOpen, setMenuOpen]   = useState(false);
@@ -211,7 +222,7 @@ export default function HazeEffect() {
     if (isBooked) return false;
 
     // Check if time has passed for today
-    const todayStr = new Date().toISOString().split("T")[0];
+    const todayStr = toLocalISODate(new Date());
     if (dateStr !== todayStr) return true;
     const now = new Date();
     const bookingTime = new Date();
@@ -800,7 +811,7 @@ export default function HazeEffect() {
               <div className="fu">
                 <span className="lbl">Pick a Date</span>
                 <div style={{ display:"flex", gap:8, overflowX:"auto", paddingBottom:10, marginBottom:28 }}>
-                  {dates.map((d,i)=>{ const val=d.toISOString().split("T")[0]; return (
+                  {dates.map((d,i)=>{ const val=toLocalISODate(d); return (
                     <div key={i} className={`dc ${selDate===val?"s":""}`} onClick={()=>setSelDate(val)}>
                       <div style={{ fontSize:9, marginBottom:2, opacity:.7 }}>{d.toLocaleDateString("en-US",{weekday:"short"})}</div>
                       <div style={{ fontSize:15, fontWeight:700 }}>{d.getDate()}</div>
