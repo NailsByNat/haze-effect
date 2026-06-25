@@ -31,6 +31,19 @@ const supabase = {
       const data = await res.json();
       return { data, error: res.ok ? null : data };
     },
+    delete: async (filters={}) => {
+      let url = `${SUPABASE_URL}/rest/v1/${table}?`;
+      Object.entries(filters).forEach(([k,v]) => { url += `${k}=eq.${v}&`; });
+      const res = await fetch(url, {
+        method: "DELETE",
+        headers: {
+          "apikey": SUPABASE_KEY,
+          "Authorization": `Bearer ${SUPABASE_KEY}`,
+          "Prefer": "return=minimal",
+        },
+      });
+      return { error: res.ok ? null : await res.json() };
+    },
   }),
 };
 
@@ -144,19 +157,29 @@ export default function HazeEffect() {
   const [agreed, setAgreed]       = useState(false);
   const [confirmed, setConfirmed] = useState(false);
   const [bookedSlots, setBookedSlots] = useState([]);
+  const [blockedSlots, setBlockedSlots] = useState([]);
+  const [adminAuthed, setAdminAuthed] = useState(false);
+  const [adminPin, setAdminPin] = useState("");
+  const [adminPinError, setAdminPinError] = useState(false);
+  const [adminDate, setAdminDate] = useState("");
+  const [adminTime, setAdminTime] = useState("");
+  const [adminBlockAll, setAdminBlockAll] = useState(false);
+  const [adminBlocking, setAdminBlocking] = useState(false);
   const [contactName, setContactName]       = useState("");
   const [contactEmail, setContactEmail]     = useState("");
   const [contactPhone, setContactPhone]     = useState("");
   const [contactMessage, setContactMessage] = useState("");
   const [contactSent, setContactSent]       = useState(false);
 
-  // Fetch booked slots from Supabase on load
+  // Fetch booked slots and blocked slots from Supabase on load
   useEffect(() => {
-    const fetchBookedSlots = async () => {
-      const { data } = await supabase.from("Bookings").select("date,time");
-      if (data) setBookedSlots(data);
+    const fetchSlots = async () => {
+      const { data: booked } = await supabase.from("Bookings").select("date,time");
+      if (booked) setBookedSlots(booked);
+      const { data: blocked } = await supabase.from("blocked_slots").select("id,date,time");
+      if (blocked) setBlockedSlots(blocked);
     };
-    fetchBookedSlots();
+    fetchSlots();
   }, []);
 
   const GOOGLE_API_KEY = "AIzaSyC-n_eLFgaMZV8E85HhghvTEGVVdy04mWI";
@@ -212,6 +235,13 @@ export default function HazeEffect() {
       const breakEnd = toMinutes("3:30 PM");
       if (slotMinutes > breakStart && slotMinutes < breakEnd) return false;
     }
+
+    // Check if this slot is admin-blocked (full day or specific time)
+    const isBlocked = blockedSlots.some(b => {
+      if (b.date !== dateStr) return false;
+      return !b.time || b.time === timeStr; // null time = full day block
+    });
+    if (isBlocked) return false;
 
     // Check if this slot falls within 3.5 hours of any booked slot on the same date
     const isBooked = bookedSlots.some(slot => {
@@ -522,10 +552,11 @@ export default function HazeEffect() {
             <div style={{ borderTop:`1px solid ${C.border}`, padding:"32px 40px", display:"flex", justifyContent:"space-between", alignItems:"center", flexWrap:"wrap", gap:16 }}>
               <div className="cg" style={{ fontSize:18, fontWeight:300, fontStyle:"italic", ...glitterText }}>The Haze Effect</div>
               <div className="dm" style={{ fontSize:11, color:C.dim }}>Columbus, OH · Mobile Nail Tech · By Appointment Only</div>
-              <div style={{ display:"flex", gap:8 }}>
+              <div style={{ display:"flex", gap:8, alignItems:"center" }}>
                 {[C.pink,C.lav,C.mint,C.rose,C.sky].map((c,i)=>(
                   <div key={i} style={{ width:8, height:8, borderRadius:"50%", background:c, boxShadow:`0 0 4px ${c}88` }} />
                 ))}
+                <span onClick={()=>nav("admin")} style={{ marginLeft:8, fontSize:9, color:"transparent", cursor:"default", userSelect:"none" }}>✦</span>
               </div>
             </div>
           </div>
@@ -769,6 +800,7 @@ export default function HazeEffect() {
                   <p className="dm" style={{ fontSize:12, color:C.muted, lineHeight:1.7, fontWeight:300, marginBottom:12 }}>Loved your nails? Come back and leave a quick review — it means the world to a small business like mine! 💜</p>
                   <button className="btn-sm" style={{ color:C.gold, borderColor:C.gold, fontSize:10 }} onClick={()=>nav("review")}>Leave a Review After Your Appointment ⭐</button>
                 </div>
+                <button className="btn-ghost" style={{ width:"100%" }} onClick={()=>{ resetBooking(); nav("home"); }}>Back to Home</button>
               </div>
 
             ) : step===1 ? (
@@ -983,6 +1015,110 @@ export default function HazeEffect() {
                 Book Your Next Appointment ✦
               </button>
             </div>
+          </div>
+        )}
+
+        {/* ══ ADMIN ══ */}
+        {page==="admin" && (
+          <div className="sec-pad" style={{ maxWidth:600, margin:"0 auto", padding:"60px 32px 80px" }}>
+            <div style={{ marginBottom:40 }}>
+              <div className="dm" style={{ fontSize:9, letterSpacing:4, color:C.dim, textTransform:"uppercase", marginBottom:14, display:"flex", alignItems:"center", gap:10 }}>
+                <div style={{ width:20, height:1, background:C.dim }} />Admin
+              </div>
+              <h1 className="cg" style={{ fontSize:"clamp(32px,5vw,48px)", fontWeight:300, ...glitterText }}>Schedule <em style={glitterText}>Manager</em></h1>
+            </div>
+
+            {!adminAuthed ? (
+              <div className="fu" style={{ background:"rgba(250,250,248,.95)", border:`1px solid ${C.border}`, borderRadius:4, padding:"40px 32px", position:"relative", overflow:"hidden" }}>
+                <div style={{ position:"absolute", top:0, left:0, right:0, height:2, background:`linear-gradient(90deg,${C.pink},${C.lav},${C.mint})` }} />
+                <div className="dm" style={{ fontSize:10, letterSpacing:2, color:C.lav, textTransform:"uppercase", fontWeight:600, marginBottom:24 }}>Enter your PIN to continue</div>
+                <div style={{ marginBottom:16 }}>
+                  <label className="lbl">PIN</label>
+                  <input className="fld" type="password" placeholder="••••••••" value={adminPin} onChange={e=>{ setAdminPin(e.target.value); setAdminPinError(false); }} onKeyDown={e=>{ if(e.key==="Enter"){ if(adminPin==="haze2025"){ setAdminAuthed(true); setAdminPin(""); } else { setAdminPinError(true); } } }} />
+                  {adminPinError && <div className="dm" style={{ fontSize:11, color:C.rose, marginTop:6 }}>Incorrect PIN. Try again.</div>}
+                </div>
+                <button className="btn-main" onClick={()=>{ if(adminPin==="haze2025"){ setAdminAuthed(true); setAdminPin(""); } else { setAdminPinError(true); } }}>Unlock ✦</button>
+              </div>
+            ) : (
+              <div className="fu">
+                {/* Block a slot */}
+                <div style={{ background:"rgba(250,250,248,.95)", border:`1px solid ${C.border}`, borderRadius:4, padding:"28px 28px 24px", marginBottom:20, position:"relative", overflow:"hidden" }}>
+                  <div style={{ position:"absolute", top:0, left:0, right:0, height:2, background:`linear-gradient(90deg,${C.pink},${C.lav},${C.mint})` }} />
+                  <div className="dm" style={{ fontSize:10, letterSpacing:2, color:C.lav, textTransform:"uppercase", fontWeight:600, marginBottom:20 }}>✦ Block Time Off</div>
+                  <div style={{ display:"flex", flexDirection:"column", gap:14, marginBottom:20 }}>
+                    <div>
+                      <label className="lbl">Date</label>
+                      <input className="fld" type="date" value={adminDate} onChange={e=>setAdminDate(e.target.value)} min={toLocalISODate(new Date())} />
+                    </div>
+                    <div>
+                      <label style={{ display:"flex", alignItems:"center", gap:10, cursor:"pointer", marginBottom:12 }}>
+                        <input type="checkbox" checked={adminBlockAll} onChange={e=>{ setAdminBlockAll(e.target.checked); setAdminTime(""); }} style={{ accentColor:C.lav, width:16, height:16 }} />
+                        <span className="dm" style={{ fontSize:12, color:C.chrome, fontWeight:500 }}>Block entire day</span>
+                      </label>
+                      {!adminBlockAll && (
+                        <div>
+                          <label className="lbl">Time Slot</label>
+                          <select className="fld" value={adminTime} onChange={e=>setAdminTime(e.target.value)}>
+                            <option value="">Select a time...</option>
+                            {times.map(t=><option key={t} value={t}>{t}</option>)}
+                          </select>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <button className="btn-main" disabled={!adminDate || (!adminBlockAll && !adminTime) || adminBlocking}
+                    onClick={async()=>{
+                      setAdminBlocking(true);
+                      if(adminBlockAll){
+                        // Block every time slot for the day
+                        for(const t of times){
+                          await supabase.from("blocked_slots").insert({ date:adminDate, time:t });
+                        }
+                        setBlockedSlots(prev=>[...prev, ...times.map((t,i)=>({ id:Date.now()+i, date:adminDate, time:t }))]);
+                      } else {
+                        const { error } = await supabase.from("blocked_slots").insert({ date:adminDate, time:adminTime });
+                        if(!error) setBlockedSlots(prev=>[...prev, { id:Date.now(), date:adminDate, time:adminTime }]);
+                      }
+                      setAdminDate(""); setAdminTime(""); setAdminBlockAll(false); setAdminBlocking(false);
+                    }}>
+                    {adminBlocking ? "Blocking..." : `Block ${adminBlockAll ? "Full Day" : "This Slot"} ✦`}
+                  </button>
+                </div>
+
+                {/* Current blocks list */}
+                <div style={{ background:"rgba(250,250,248,.95)", border:`1px solid ${C.border}`, borderRadius:4, padding:"28px", position:"relative", overflow:"hidden" }}>
+                  <div style={{ position:"absolute", top:0, left:0, right:0, height:2, background:`linear-gradient(90deg,${C.mint},${C.lav})` }} />
+                  <div className="dm" style={{ fontSize:10, letterSpacing:2, color:C.mint, textTransform:"uppercase", fontWeight:600, marginBottom:16 }}>✦ Currently Blocked</div>
+                  {blockedSlots.length === 0 ? (
+                    <p className="dm" style={{ fontSize:13, color:C.dim, fontStyle:"italic" }}>No blocked times right now.</p>
+                  ) : (
+                    <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
+                      {[...blockedSlots].sort((a,b)=>a.date.localeCompare(b.date)||a.time?.localeCompare(b.time||"")||0).map((b)=>(
+                        <div key={b.id} style={{ display:"flex", justifyContent:"space-between", alignItems:"center", padding:"12px 16px", background:"rgba(232,229,220,.7)", borderRadius:4, border:`1px solid ${C.border}` }}>
+                          <div>
+                            <div className="dm" style={{ fontSize:12, fontWeight:600, color:C.chrome }}>
+                              {fmtDate(new Date(b.date+"T12:00:00"))}
+                            </div>
+                            <div className="dm" style={{ fontSize:11, color:C.dim, marginTop:2 }}>{b.time || "Full Day"}</div>
+                          </div>
+                          <button className="btn-sm" style={{ color:C.rose, borderColor:C.rose, fontSize:10, padding:"6px 14px" }}
+                            onClick={async()=>{
+                              await supabase.from("blocked_slots").delete({ id:b.id });
+                              setBlockedSlots(prev=>prev.filter(s=>s.id!==b.id));
+                            }}>
+                            Remove
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                <button className="btn-ghost" style={{ width:"100%", marginTop:20 }} onClick={()=>{ setAdminAuthed(false); nav("home"); }}>
+                  Exit Admin
+                </button>
+              </div>
+            )}
           </div>
         )}
 
