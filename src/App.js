@@ -143,7 +143,10 @@ const toLocalISODate = (d) => {
 };
 
 export default function HazeEffect() {
-  const [page, setPage]           = useState("home");
+  const [page, setPage] = useState(() => {
+    const hash = window.location.hash.replace("#", "");
+    return hash === "admin" ? "admin" : "home";
+  });
   const [menuOpen, setMenuOpen]   = useState(false);
   const [step, setStep]           = useState(1);
   const [selSvc, setSelSvc]       = useState([]);
@@ -270,7 +273,13 @@ export default function HazeEffect() {
   const dates = Array.from({length:14},(_,i)=>{ const d=new Date(today); d.setDate(today.getDate()+i+1); return d; });
   const fmtDate = d => d.toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"});
   const resetBooking = () => { setStep(1);setSelSvc([]);setSelDate("");setSelTime("");setName("");setPhone("");setEmail("");setNotes("");setAddress("");setAgreed(false);setConfirmed(false); };
-  const nav = p => { setPage(p); setMenuOpen(false); if(p!=="book") resetBooking(); window.scrollTo(0,0); };
+  const nav = p => {
+    setPage(p);
+    setMenuOpen(false);
+    window.location.hash = p === "home" ? "" : p;
+    if(p!=="book") resetBooking();
+    window.scrollTo(0,0);
+  };
 
   const submitBooking = async () => {
     // Save to Supabase
@@ -556,7 +565,6 @@ export default function HazeEffect() {
                 {[C.pink,C.lav,C.mint,C.rose,C.sky].map((c,i)=>(
                   <div key={i} style={{ width:8, height:8, borderRadius:"50%", background:c, boxShadow:`0 0 4px ${c}88` }} />
                 ))}
-                <span onClick={()=>nav("admin")} style={{ marginLeft:8, fontSize:9, color:"transparent", cursor:"default", userSelect:"none" }}>✦</span>
               </div>
             </div>
           </div>
