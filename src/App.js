@@ -769,7 +769,6 @@ export default function HazeEffect() {
                   <p className="dm" style={{ fontSize:12, color:C.muted, lineHeight:1.7, fontWeight:300, marginBottom:12 }}>Loved your nails? Come back and leave a quick review — it means the world to a small business like mine! 💜</p>
                   <button className="btn-sm" style={{ color:C.gold, borderColor:C.gold, fontSize:10 }} onClick={()=>nav("review")}>Leave a Review After Your Appointment ⭐</button>
                 </div>
-                <button className="btn-ghost" style={{ width:"100%" }} onClick={()=>{ resetBooking(); nav("home"); }}>Back to Home</button>
               </div>
 
             ) : step===1 ? (
