@@ -594,12 +594,6 @@ export default function HazeEffect() {
                 </div>
               ))}
             </div>
-            <div style={{ background:`rgba(192,112,128,.08)`, border:`1px solid ${C.pink}44`, padding:"20px 28px", borderRadius:4, display:"flex", alignItems:"center", gap:14, marginTop:14 }}>
-  <span style={{ fontSize:22, flexShrink:0 }}>🚫</span>
-  <p className="dm" style={{ fontSize:13, color:"#0A0806", lineHeight:1.8, fontWeight:400, fontStyle:"italic" }}>
-    <strong style={{ color:C.pink, fontStyle:"normal" }}>Please Note ✦</strong> Natasha does <strong>not</strong> work over another nail salon's previous work. All sets must be on natural nails or a fresh removal. Questions? <span style={{ color:C.lav, cursor:"pointer", textDecoration:"underline" }} onClick={()=>nav("contact")}>Contact her before booking.</span>
-  </p>
-</div>
             <div style={{ background:"rgba(250,250,248,.9)", border:`1px solid ${C.border}`, padding:"24px 28px", borderRadius:4, marginBottom:14 }}>
               <div className="dm" style={{ fontSize:10, letterSpacing:2, color:C.lav, textTransform:"uppercase", fontWeight:600, marginBottom:10 }}>✦ Note on Pricing</div>
               <p className="dm" style={{ fontSize:13, color:"#0A0806", lineHeight:1.8, fontWeight:400 }}>All listed prices are <strong style={{ color:C.chrome }}>starting rates</strong>. Final pricing may vary based on nail length, shape, design complexity, and add-ons. A non-refundable deposit is required to secure your appointment. Exact pricing will be confirmed at booking.</p>
@@ -612,6 +606,7 @@ export default function HazeEffect() {
             </div>
           </div>
         )}
+
         {/* ══ GALLERY ══ */}
         {page==="gallery" && (
           <div className="sec-pad" style={{ maxWidth:1000, margin:"0 auto", padding:"60px 64px" }}>
@@ -813,8 +808,7 @@ export default function HazeEffect() {
                   <p className="dm" style={{ fontSize:12, color:C.muted, lineHeight:1.7, fontWeight:300, marginBottom:12 }}>Loved your nails? Come back and leave a quick review — it means the world to a small business like mine! 💜</p>
                   <button className="btn-sm" style={{ color:C.gold, borderColor:C.gold, fontSize:10 }} onClick={()=>nav("review")}>Leave a Review After Your Appointment ⭐</button>
                 </div>
-                <button className="btn-ghost" style={{ width:"100%" }} onClick={()=>{ resetBooking(); nav("home"); }}>Back to Home</button>
-              </div>
+                </div>
 
             ) : step===1 ? (
               <div className="fu">
