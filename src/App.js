@@ -803,11 +803,6 @@ export default function HazeEffect() {
                   <button className="btn-main" style={{ width:"100%", fontSize:13, padding:"16px" }}>Pay $10 Deposit Now 💳</button>
                 </a>
                 <p className="dm" style={{ fontSize:11, color:C.dim, marginBottom:24, textAlign:"center" }}>A confirmation email will be sent to {email} once your deposit is received! 📱</p>
-                <div style={{ background:`rgba(168,128,64,.08)`, border:`1px solid ${C.gold}44`, borderRadius:4, padding:"20px 24px", marginBottom:16, textAlign:"left" }}>
-                  <div className="dm" style={{ fontSize:10, letterSpacing:2, color:C.gold, textTransform:"uppercase", fontWeight:600, marginBottom:8 }}>💅 After your appointment</div>
-                  <p className="dm" style={{ fontSize:12, color:C.muted, lineHeight:1.7, fontWeight:300, marginBottom:12 }}>Loved your nails? Come back and leave a quick review — it means the world to a small business like mine! 💜</p>
-                  <button className="btn-sm" style={{ color:C.gold, borderColor:C.gold, fontSize:10 }} onClick={()=>nav("review")}>Leave a Review After Your Appointment ⭐</button>
-                </div>
                 </div>
 
             ) : step===1 ? (
